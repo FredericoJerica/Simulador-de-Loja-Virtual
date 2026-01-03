@@ -7,6 +7,126 @@
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
+
+	<!-- CABEÇALHO COM LOGO E CARRINHO -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">🛒</span>
+                <span>TechStore</span>
+            </div>
+            <div class="carrinho-wrapper">
+                <button id="carrinho-btn">
+                    <span>Carrinho</span>
+                    <span id="contador-carrinho">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MENU DE CATEGORIAS -->
+    <section class="categorias-section">
+        
+        <div class="container">
+            <form action="" style="text-align: center;">
+            <div class="barra-pesquisa">
+                <input 
+                    type="search" 
+                    id="campo-pesquisa" 
+                    placeholder="Pesquisar produtos..." 
+                    aria-label="Campo de pesquisa de produtos"
+                >
+                <button id="botao-pesquisa" aria-label="Pesquisar">
+                    🔍
+                </button>
+            </div>
+            
+        </form>
+            <div class="categorias">
+                <button data-categoria="todos" class="ativa">Todos os Produtos</button>
+                <!-- Os botões serão gerados dinamicamente via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CATÁLOGO DE PRODUTOS -->
+    <main class="container catalogo-section">
+        <h2 id="titulo-catalogo">Nossos Produtos</h2>
+        <div class="produtos-grid" id="catalogo-produtos">
+            <!-- Os produtos serão renderizados aqui via JavaScript -->
+            <div class="produto-card">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiI+UHJvZHV0byAxPC90ZXh0Pjwvc3ZnPg==" alt="Produto exemplo" class="produto-imagem">
+                <div class="produto-info">
+                    <h3 class="produto-nome">Produto de Exemplo</h3>
+                    <p class="produto-preco">R$ 99,90</p>
+                    <button class="btn-adicionar" data-id="1">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CARRINHO SIDEBAR (OCULTO POR PADRÃO) -->
+    <aside id="carrinho-sidebar">
+        <div class="carrinho-header">
+            <h3 class="carrinho-titulo">Seu Carrinho</h3>
+            <button class="fechar-carrinho">×</button>
+        </div>
+        <div id="carrinho-itens">
+            <!-- Itens do carrinho serão renderizados aqui -->
+            <div class="carrinho-vazio">Seu carrinho está vazio</div>
+        </div>
+        <div id="carrinho-total" style="display: none;">
+            <hr>
+            <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; margin-top: 1rem;">
+                <span>Total:</span>
+                <span id="total-valor">R$ 0,00</span>
+            </div>
+            <button id="finalizar-compra" style="width: 100%; padding: 1rem; background: #27ae60; color: white; border: none; border-radius: 8px; margin-top: 1.5rem; font-weight: 600; cursor: pointer;">
+                Finalizar Compra
+            </button>
+        </div>
+    </aside>
+
+    <!-- ÁREA ADMINISTRATIVA (ESCONDIDA) -->
+    <div class="container admin-toggle">
+        <button id="btn-admin">Modo Administrador</button>
+    </div>
+
+    <form id="formulario-admin" class="container">
+        <h3 style="text-align: center; margin-bottom: 1.5rem; color: #2c3e50;">Cadastrar Novo Produto</h3>
+        
+        <div class="form-group">
+            <label for="admin-nome">Nome do Produto</label>
+            <input type="text" id="admin-nome" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="admin-preco">Preço (R$)</label>
+            <input type="number" id="admin-preco" step="0.01" min="0" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="admin-categoria">Categoria</label>
+            <select id="admin-categoria" required>
+                <option value="">Selecione...</option>
+                <option value="eletronicos">Eletrônicos</option>
+                <option value="vestuario">Vestuário</option>
+                <option value="livros">Livros</option>
+                <option value="moveis">Móveis</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="admin-imagem">Imagem do Produto</label>
+            <input type="file" id="admin-imagem" accept="image/*" required>
+            <small style="color: #666; display: block; margin-top: 5px;">Use imagens quadradas para melhor visualização</small>
+        </div>
+        
+        <button type="submit" class="btn-submit">Cadastrar Produto</button>
+    </form>
+
+    <!-- OVERLAY PARA CARRINHO -->
+    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
     
    <script src="script.js"></script>
 </body>
