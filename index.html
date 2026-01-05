@@ -8,7 +8,7 @@
 </head>
 <body>
 
-	<!-- CABEÇALHO COM LOGO E CARRINHO -->
+	
     <header>
         <div class="container header-content">
             <div class="logo">
@@ -53,15 +53,7 @@
     <main class="container catalogo-section">
         <h2 id="titulo-catalogo">Nossos Produtos</h2>
         <div class="produtos-grid" id="catalogo-produtos">
-            <!-- Os produtos serão renderizados aqui via JavaScript -->
-            <div class="produto-card">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiI+UHJvZHV0byAxPC90ZXh0Pjwvc3ZnPg==" alt="Produto exemplo" class="produto-imagem">
-                <div class="produto-info">
-                    <h3 class="produto-nome">Produto de Exemplo</h3>
-                    <p class="produto-preco">R$ 99,90</p>
-                    <button class="btn-adicionar" data-id="1">Adicionar ao Carrinho</button>
-                </div>
-            </div>
+            
         </div>
     </main>
 
@@ -90,6 +82,11 @@
     <!-- ÁREA ADMINISTRATIVA (ESCONDIDA) -->
     <div class="container admin-toggle">
         <button id="btn-admin">Modo Administrador</button>
+
+        <button id="btn-resetar" style="background: #ff6b6b; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+        🔄 Resetar Sistema
+    </button>
+
     </div>
 
     <form id="formulario-admin" class="container">
@@ -101,8 +98,14 @@
         </div>
         
         <div class="form-group">
-            <label for="admin-preco">Preço (R$)</label>
+            <label for="admin-preco">Preço (kz)</label>
             <input type="number" id="admin-preco" step="0.01" min="0" required>
+        </div>
+
+         <div class="form-group">
+            <label for="admin-estoque">Estoque Disponível</label>
+            <input type="number" id="admin-estoque" required>
+            <small style="color: #666; display: block; margin-top: 5px;">Quantidade disponível em estoque</small>
         </div>
         
         <div class="form-group">
@@ -121,6 +124,8 @@
             <input type="file" id="admin-imagem" accept="image/*" required>
             <small style="color: #666; display: block; margin-top: 5px;">Use imagens quadradas para melhor visualização</small>
         </div>
+
+
         
         <button type="submit" class="btn-submit">Cadastrar Produto</button>
     </form>

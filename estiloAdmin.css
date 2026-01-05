@@ -1,0 +1,324 @@
+/* estiloAdmin.css - Estilos específicos para a página admin */
+
+/* ================ LOGIN ================ */
+#login-area {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-container {
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-container h2 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+/* ================ ADMIN ÁREA ================ */
+#admin-area {
+    padding: 2rem 0;
+}
+
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #eee;
+}
+
+.admin-header h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.btn-voltar {
+    background: #2c3e50;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-voltar:hover {
+    background: #1c2c40;
+}
+
+/* ================ GRID ADMIN ================ */
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+}
+
+@media (max-width: 900px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================ SEÇÕES ADMIN ================ */
+.admin-section {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.admin-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1.8rem;
+    font-size: 1.5rem;
+}
+
+/* ================ FORMULÁRIO ================ */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.9rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #4a6491;
+    outline: none;
+}
+
+.form-group small {
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* ================ BOTÕES ================ */
+.btn-login {
+    background: #4a6491;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    margin-top: 1.5rem;
+}
+
+.btn-login:hover {
+    background: #3a5481;
+}
+
+.btn-submit {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.btn-submit:hover {
+    background: #219653;
+}
+
+/* ================ LISTA DE PRODUTOS ================ */
+.produtos-lista {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-top: 1.5rem;
+    padding-right: 10px;
+}
+
+/* Scrollbar personalizada */
+.produtos-lista::-webkit-scrollbar {
+    width: 6px;
+}
+
+.produtos-lista::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.produtos-lista::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.produtos-lista::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* ================ ITENS DE PRODUTO ================ */
+.produto-admin-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem;
+    border-bottom: 1px solid #eee;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.produto-admin-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: white;
+}
+
+.produto-admin-info h4 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.produto-admin-info p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 3px 0;
+}
+
+.produto-admin-info small {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/* ================ BOTÃO ELIMINAR ================ */
+.btn-eliminar {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    margin-left: 1rem;
+}
+
+.btn-eliminar:hover {
+    background: #ff5252;
+    transform: scale(1.05);
+}
+
+/* ================ MENSAGENS ================ */
+.mensagem-erro {
+    color: #ff6b6b;
+    background: #fff5f5;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid #ffcccc;
+    display: none;
+}
+
+/* ================ RESPONSIVIDADE ================ */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 2rem;
+        margin: 1rem;
+    }
+    
+    .admin-section {
+        padding: 1.8rem;
+    }
+    
+    .admin-header {
+        flex-direction: column;
+        gap: 1.2rem;
+        text-align: center;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 1.5rem;
+    }
+    
+    .admin-section {
+        padding: 1.5rem;
+    }
+    
+    .produto-admin-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .btn-eliminar {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 0.8rem;
+    }
+}
+
+/* ================ ESTADO VAZIO ================ */
+#lista-produtos:empty::before {
+    content: "Nenhum produto cadastrado. Use o formulário ao lado para adicionar produtos.";
+    display: block;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #ddd;
+}

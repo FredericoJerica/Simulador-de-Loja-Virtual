@@ -352,6 +352,21 @@
     transition: all 0.2s ease;
 }
 
+.btn-remover {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.btn-remover:hover {
+    background: #ff5252;
+}
+
 .btn-diminuir:hover:not(:disabled), 
 .btn-aumentar:hover:not(:disabled) {
     background: #4a6491;

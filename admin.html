@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - TechStore</title>
+    <!--<link rel="stylesheet" href="estilo.css">-->
+    <link rel="stylesheet" href="estiloAdmin.css">
+
+    
+    
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">🛒</span>
+                <span>TechStore Admin</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="login-area">
+        <div class="login-container">
+            <h2>Acesso Administrativo</h2>
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="usuario">Usuário</label>
+                    <input type="text" id="usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" required>
+                </div>
+                <button type="submit" class="btn-login">Entrar</button>
+                <div id="mensagem-erro" class="mensagem-erro">Usuário ou senha incorretos!</div>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-area" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>Painel Administrativo</h2>
+                <a href="index.html" class="btn-voltar">← Voltar à Loja</a>
+            </div>
+            
+            <div class="admin-grid">
+                <!-- Seção Cadastro de Produtos -->
+                <div class="admin-section">
+                    <h3>Cadastrar Novo Produto</h3>
+                    <form id="formulario-admin">
+                        <div class="form-group">
+                            <label for="admin-nome">Nome do Produto</label>
+                            <input type="text" id="admin-nome" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-preco">Preço (kz)</label>
+                            <input type="number" id="admin-preco" step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-estoque">Estoque Disponível</label>
+                            <input type="number" id="admin-estoque" min="0" value="10" required>
+                            <small style="color: #666;">Quantidade disponível em estoque</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-categoria">Categoria</label>
+                            <select id="admin-categoria" required>
+                                <option value="">Selecione...</option>
+                                <option value="eletronicos">Eletrônicos</option>
+                                <option value="vestuario">Vestuário</option>
+                                <option value="livros">Livros</option>
+                                <option value="moveis">Móveis</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-imagem">Imagem do Produto</label>
+                            <input type="file" id="admin-imagem" accept="image/*" required>
+                            <small style="color: #666; display: block; margin-top: 5px;">Use imagens quadradas para melhor visualização</small>
+                        </div>
+                        
+                        <button type="submit" class="btn-submit">Cadastrar Produto</button>
+                    </form>
+                </div>
+                
+                <!-- Seção Gerenciar Produtos -->
+                <div class="admin-section">
+                    <h3>Produtos Cadastrados</h3>
+                    <p>Total: <span id="total-produtos">0</span> produtos</p>
+                    
+                    <div class="produtos-lista" id="lista-produtos">
+                        <!-- Produtos serão listados aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Credenciais de acesso (em um sistema real, isso estaria no backend)
+        const USUARIO_ADMIN = "admin";
+        const SENHA_ADMIN = "techstore123";
+        
+        // Verificar se está logado
+        let usuarioLogado = localStorage.getItem('admin_logado') === 'true';
+        
+        // Elementos
+        const loginArea = document.getElementById('login-area');
+        const adminArea = document.getElementById('admin-area');
+        const formLogin = document.getElementById('form-login');
+        const mensagemErro = document.getElementById('mensagem-erro');
+        
+        // Inicializar página
+        if (usuarioLogado) {
+            mostrarAreaAdmin();
+        } else {
+            mostrarAreaLogin();
+        }
+        
+        // Evento de login
+        formLogin.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            
+            if (usuario === USUARIO_ADMIN && senha === SENHA_ADMIN) {
+                // Login bem-sucedido
+                localStorage.setItem('admin_logado', 'true');
+                usuarioLogado = true;
+                mostrarAreaAdmin();
+                carregarProdutos();
+            } else {
+                // Login falhou
+                mensagemErro.style.display = 'block';
+                setTimeout(() => {
+                    mensagemErro.style.display = 'none';
+                }, 3000);
+            }
+        });
+        
+        // Logout automático após 30 minutos
+        setTimeout(() => {
+            if (usuarioLogado) {
+                localStorage.removeItem('admin_logado');
+                alert('Sessão expirada. Por favor, faça login novamente.');
+                window.location.reload();
+            }
+        }, 30 * 60 * 1000); // 30 minutos
+        
+        function mostrarAreaLogin() {
+            loginArea.style.display = 'block';
+            adminArea.style.display = 'none';
+        }
+        
+        function mostrarAreaAdmin() {
+            loginArea.style.display = 'none';
+            adminArea.style.display = 'block';
+        }
+        
+        // ==================== FUNÇÕES DE PRODUTOS ====================
+        let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+        
+        function salvarProdutos() {
+            localStorage.setItem('produtos', JSON.stringify(produtos));
+        }
+        
+        function formatarPreco(preco) {
+            return `${preco.toFixed(2).replace('.', ',')} kz`;
+        }
+        
+        function carregarProdutos() {
+            const lista = document.getElementById('lista-produtos');
+            const totalSpan = document.getElementById('total-produtos');
+            
+            // Atualiza contador
+            totalSpan.textContent = produtos.length;
+            
+            if (produtos.length === 0) {
+                lista.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        <p>Nenhum produto cadastrado.</p>
+                        <p>Use o formulário ao lado para adicionar produtos.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Renderiza lista de produtos
+            lista.innerHTML = '';
+            produtos.forEach((produto, index) => {
+                const item = document.createElement('div');
+                item.className = 'produto-admin-item';
+                item.innerHTML = `
+                    <div class="produto-admin-info">
+                        <h4>${produto.nome}</h4>
+                        <p>${formatarPreco(produto.preco)} • Estoque: ${produto.estoque}</p>
+                        <p><small>Categoria: ${produto.categoria}</small></p>
+                    </div>
+                    <button class="btn-eliminar" data-id="${produto.id}">
+                        Eliminar
+                    </button>
+                `;
+                lista.appendChild(item);
+            });
+        }
+        
+        // Cadastrar produto
+        document.getElementById('formulario-admin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('admin-nome').value;
+            const preco = parseFloat(document.getElementById('admin-preco').value);
+            const estoque = parseInt(document.getElementById('admin-estoque').value);
+            const categoria = document.getElementById('admin-categoria').value;
+            const inputImagem = document.getElementById('admin-imagem');
+            
+            // Validação
+            if (!nome || !preco || isNaN(estoque) || !categoria || inputImagem.files.length === 0) {
+                alert('Preencha todos os campos corretamente!');
+                return;
+            }
+            
+            if (preco <= 0) {
+                alert('O preço deve ser maior que zero!');
+                return;
+            }
+            
+            if (estoque < 0) {
+                alert('O estoque não pode ser negativo!');
+                return;
+            }
+            
+            const arquivo = inputImagem.files[0];
+            const leitor = new FileReader();
+            
+            leitor.onload = function(e) {
+                const novoProduto = {
+                    id: Date.now(),
+                    nome: nome,
+                    preco: preco,
+                    categoria: categoria,
+                    estoque: estoque,
+                    imagem: e.target.result
+                };
+                
+                produtos.push(novoProduto);
+                salvarProdutos();
+                
+                // Atualiza interface
+                carregarProdutos();
+                
+                // Limpa formulário
+                document.getElementById('admin-nome').value = '';
+                document.getElementById('admin-preco').value = '';
+                document.getElementById('admin-estoque').value = '10';
+                document.getElementById('admin-categoria').value = '';
+                document.getElementById('admin-imagem').value = '';
+                
+                alert(`✅ Produto "${nome}" cadastrado com sucesso!`);
+            };
+            
+            leitor.readAsDataURL(arquivo);
+        });
+        
+        // Eliminar produto
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-eliminar')) {
+                const id = parseInt(e.target.getAttribute('data-id'));
+                
+                if (confirm('Tem certeza que deseja eliminar este produto?\nEsta ação não pode ser desfeita.')) {
+                    // Remove o produto
+                    produtos = produtos.filter(p => p.id !== id);
+                    salvarProdutos();
+                    
+                    // Recarrega a lista
+                    carregarProdutos();
+                    
+                    alert('Produto eliminado com sucesso!');
+                }
+            }
+        });
+        
+        // Carregar produtos quando a página admin for exibida
+        if (usuarioLogado) {
+            carregarProdutos();
+        }
+    </script>
+</body>
+</html>
