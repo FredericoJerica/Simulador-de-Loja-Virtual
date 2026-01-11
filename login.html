@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - FreOde</title>
+    <link rel="stylesheet" href="estiloAdmin.css">
+    <style>
+        /* Estilos específicos para a página de login */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 2rem;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-title {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        
+        .btn-voltar {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #4a6491;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .btn-voltar:hover {
+            text-decoration: underline;
+        }
+        
+        .cred-test {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .cred-test p {
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="logo" style="justify-content: center; margin-bottom: 1.5rem;">
+                <span class="logo-icon">🛒</span>
+                <span>FreOde Admin</span>
+            </div>
+            
+            <h2 class="login-title">Acesso Administrativo</h2>
+            
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="usuario">Usuário</label>
+                    <input type="text" id="usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" required>
+                </div>
+                <button type="submit" class="btn-login">Entrar</button>
+                <div id="mensagem-erro" class="mensagem-erro">Usuário ou senha incorretos!</div>
+            </form>
+            
+            <a href="index.html" class="btn-voltar">← Voltar à Loja</a>
+            
+            <div class="cred-test">
+                <p><strong>Credenciais para teste:</strong></p>
+                <p>Usuário: <strong>admin</strong></p>
+                <p>Senha: <strong>admin123</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Credenciais de acesso
+        const USUARIO_ADMIN = "admin";
+        const SENHA_ADMIN = "admin123";
+        
+        // Elementos
+        const formLogin = document.getElementById('form-login');
+        const mensagemErro = document.getElementById('mensagem-erro');
+        
+       
+        
+        // Evento de login
+        formLogin.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            
+            if (usuario === USUARIO_ADMIN && senha === SENHA_ADMIN) {
+                // Login bem-sucedido
+                localStorage.setItem('admin_logado', 'true');
+                // Redirecionar para o painel admin
+                window.location.href = 'admin.html';
+            } else {
+                // Login falhou
+                mensagemErro.style.display = 'block';
+                setTimeout(() => {
+                    mensagemErro.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

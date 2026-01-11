@@ -15,12 +15,40 @@
                 <span class="logo-icon">🛒</span>
                 <span>FreOde</span>
             </div>
-            <div class="carrinho-wrapper">
-                <button id="carrinho-btn">
-                    <span>Carrinho</span>
-                    <span id="contador-carrinho">0</span>
-                </button>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+
+                <div class="carrinho-wrapper">
+                    <button id="carrinho-btn">
+                        <span>Carrinho</span>
+                        <span id="contador-carrinho">0</span>
+                    </button>
+                </div>
+
+                <a href="login.html" style="
+                background: linear-gradient(135deg, #4a6491 0%, #6a84b1 100%);
+                color: white;
+                padding: 0.7rem 1.3rem;
+                border: none;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                box-shadow: 0 4px 12px rgba(74, 100, 145, 0.2);
+            ">
+                👤 <span>Entrar</span>
+            </a>
+                
+
+
+            
+
             </div>
+
         </div>
     </header>
 
@@ -79,60 +107,64 @@
         </div>
     </aside>
 
-    <!-- ÁREA ADMINISTRATIVA (ESCONDIDA) -->
-    <div class="container admin-toggle">
-        <button id="btn-admin">Modo Administrador</button>
-
-        <button id="btn-resetar" style="background: #ff6b6b; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
-        🔄 Resetar Sistema
-    </button>
-
-    </div>
-
-    <form id="formulario-admin" class="container">
-        <h3 style="text-align: center; margin-bottom: 1.5rem; color: #2c3e50;">Cadastrar Novo Produto</h3>
-        
-        <div class="form-group">
-            <label for="admin-nome">Nome do Produto</label>
-            <input type="text" id="admin-nome" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="admin-preco">Preço (kz)</label>
-            <input type="number" id="admin-preco" step="0.01" min="0" required>
-        </div>
-
-         <div class="form-group">
-            <label for="admin-estoque">Estoque Disponível</label>
-            <input type="number" id="admin-estoque" required>
-            <small style="color: #666; display: block; margin-top: 5px;">Quantidade disponível em estoque</small>
-        </div>
-        
-        <div class="form-group">
-            <label for="admin-categoria">Categoria</label>
-            <select id="admin-categoria" required>
-                <option value="">Selecione...</option>
-                <option value="eletronicos">Eletrônicos</option>
-                <option value="vestuario">Vestuário</option>
-                <option value="livros">Livros</option>
-                <option value="moveis">Móveis</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="admin-imagem">Imagem do Produto</label>
-            <input type="file" id="admin-imagem" accept="image/*" required>
-            <small style="color: #666; display: block; margin-top: 5px;">Use imagens quadradas para melhor visualização</small>
-        </div>
-
-
-        
-        <button type="submit" class="btn-submit">Cadastrar Produto</button>
-    </form>
+    
 
     <!-- OVERLAY PARA CARRINHO -->
     <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
     
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>FreOde</h3>
+                        <p>Sua loja virtual de confiança com os melhores produtos eletrônicos, vestuário, livros e móveis.</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Categorias</h4>
+                        <ul>
+                            <li><a href="#" data-categoria="eletronicos">Eletrônicos</a></li>
+                            <li><a href="#" data-categoria="vestuario">Vestuário</a></li>
+                            <li><a href="#" data-categoria="livros">Livros</a></li>
+                            <li><a href="#" data-categoria="moveis">Móveis</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Links Rápidos</h4>
+                        <ul>
+                            <li><a href="#">Sobre Nós</a></li>
+                            <li><a href="#">Contato</a></li>
+                            <li><a href="#">Política de Privacidade</a></li>
+                            <li><a href="#">Termos de Serviço</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Contato</h4>
+                        <ul>
+                            <li>📧 contato@freode.com</li>
+                            <li>📞 +244 923 444 555</li>
+                            <li>📍 Luanda, Angola</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; 2024 FreOde - Todos os direitos reservados.</p>
+                    <div class="footer-social">
+                        <a href="#">📘</a>
+                        <a href="#">🐦</a>
+                        <a href="#">📷</a>
+                        <a href="#">🎬</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+
    <script src="script.js"></script>
 </body>
 </html>
