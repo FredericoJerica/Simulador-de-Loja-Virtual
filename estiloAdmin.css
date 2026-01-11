@@ -1,4 +1,50 @@
-/* estiloAdmin.css - Estilos específicos para a página admin */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* CABEÇALHO */
+header {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+    color: white;
+    padding: 1.2rem 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 2.2rem;
+}
 
 /* ================ LOGIN ================ */
 #login-area {
@@ -166,6 +212,24 @@
     background: #219653;
 }
 
+.btn-salvar {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-salvar:hover {
+    background: #2980b9;
+}
+
 /* ================ LISTA DE PRODUTOS ================ */
 .produtos-lista {
     max-height: 500px;
@@ -229,7 +293,30 @@
     font-size: 0.85rem;
 }
 
-/* ================ BOTÃO ELIMINAR ================ */
+/* ================ BOTÕES DO PRODUTO ================ */
+.produto-admin-botoes {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-editar {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-editar:hover {
+    background: #2980b9;
+    transform: scale(1.05);
+}
+
 .btn-eliminar {
     background: #ff6b6b;
     color: white;
@@ -241,12 +328,101 @@
     font-size: 0.9rem;
     transition: all 0.3s ease;
     white-space: nowrap;
-    margin-left: 1rem;
 }
 
 .btn-eliminar:hover {
     background: #ff5252;
     transform: scale(1.05);
+}
+
+/* ================ MODAL DE EDIÇÃO ================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+.btn-fechar {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.btn-fechar:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* ================ PREVIEW DE IMAGEM ================ */
+.imagem-preview-container {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.imagem-preview {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    border: 2px solid #eee;
+    margin: 10px auto;
+    display: block;
+}
+
+.btn-trocar-imagem {
+    background: #7f8c8d;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.btn-trocar-imagem:hover {
+    background: #6c7b7d;
 }
 
 /* ================ MENSAGENS ================ */
@@ -282,6 +458,11 @@
     .admin-header h2 {
         font-size: 1.6rem;
     }
+    
+    .modal-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -299,9 +480,13 @@
         gap: 1rem;
     }
     
-    .btn-eliminar {
-        margin-left: 0;
+    .produto-admin-botoes {
         width: 100%;
+    }
+    
+    .btn-editar,
+    .btn-eliminar {
+        flex: 1;
     }
     
     .form-group input,
@@ -321,4 +506,46 @@
     background: #f8f9fa;
     border-radius: 8px;
     border: 2px dashed #ddd;
+}
+
+/* ================ ANIMAÇÕES ================ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.produto-admin-item {
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-container {
+    animation: fadeIn 0.3s ease;
+}
+
+/* ================ GRÁFICOS ================ */
+.graficos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.grafico-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 1px solid #eaeaea;
+}
+
+.grafico-card h4 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.grafico-card canvas {
+    width: 100% !important;
+    height: 250px !important;
 }

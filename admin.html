@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - TechStore</title>
-    <!--<link rel="stylesheet" href="estilo.css">-->
-    <link rel="stylesheet" href="estiloAdmin.css">
 
-    
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="estiloAdmin.css">
 </head>
 <body>
 
@@ -63,7 +61,7 @@
                         
                         <div class="form-group">
                             <label for="admin-estoque">Estoque Disponível</label>
-                            <input type="number" id="admin-estoque" min="0" value="10" required>
+                            <input type="number" id="admin-estoque" min="0" required>
                             <small style="color: #666;">Quantidade disponível em estoque</small>
                         </div>
                         
@@ -87,6 +85,25 @@
                         <button type="submit" class="btn-submit">Cadastrar Produto</button>
                     </form>
                 </div>
+
+                <!-- Gráficos de Análise -->
+                <div class="admin-section">
+                    <h3>Análise de Produtos</h3>
+                    <div class="graficos-container">
+                        <div class="grafico-card">
+                            <h4>Produtos por Categoria</h4>
+                            <canvas id="grafico-categorias"></canvas>
+                        </div>
+                        <div class="grafico-card">
+                            <h4>Estoque Total por Categoria</h4>
+                            <canvas id="grafico-estoque"></canvas>
+                        </div>
+                        <div class="grafico-card">
+                            <h4>Valor Total em Estoque (kz)</h4>
+                            <canvas id="grafico-valor-estoque"></canvas>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Seção Gerenciar Produtos -->
                 <div class="admin-section">
@@ -101,8 +118,58 @@
         </div>
     </div>
 
+    <!-- Modal de Edição -->
+    <div id="modal-edicao" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Editar Produto</h3>
+                <button class="btn-fechar">&times;</button>
+            </div>
+            <form id="form-editar">
+                <input type="hidden" id="editar-id">
+                
+                <div class="form-group">
+                    <label for="editar-nome">Nome do Produto</label>
+                    <input type="text" id="editar-nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar-preco">Preço (kz)</label>
+                    <input type="number" id="editar-preco" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar-estoque">Estoque Disponível</label>
+                    <input type="number" id="editar-estoque" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar-categoria">Categoria</label>
+                    <select id="editar-categoria" required>
+                        <option value="">Selecione...</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="livros">Livros</option>
+                        <option value="moveis">Móveis</option>
+                    </select>
+                </div>
+                
+                <div class="imagem-preview-container">
+                    <p style="margin-bottom: 10px; font-weight: 600; color: #2c3e50;">Imagem atual:</p>
+                    <img id="imagem-atual" class="imagem-preview" src="" alt="Imagem do produto">
+                    <button type="button" class="btn-trocar-imagem" id="btn-trocar-imagem">
+                        Trocar Imagem
+                    </button>
+                    <input type="file" id="nova-imagem" accept="image/*" style="display: none;">
+                </div>
+                
+                <button type="submit" class="btn-salvar">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Credenciais de acesso (em um sistema real, isso estaria no backend)
+        // Credenciais de acesso
         const USUARIO_ADMIN = "admin";
         const SENHA_ADMIN = "techstore123";
         
@@ -114,6 +181,18 @@
         const adminArea = document.getElementById('admin-area');
         const formLogin = document.getElementById('form-login');
         const mensagemErro = document.getElementById('mensagem-erro');
+        
+        // Modal de edição
+        const modalEdicao = document.getElementById('modal-edicao');
+        const btnFecharModal = document.querySelector('.btn-fechar');
+        const formEditar = document.getElementById('form-editar');
+        const btnTrocarImagem = document.getElementById('btn-trocar-imagem');
+        const inputNovaImagem = document.getElementById('nova-imagem');
+        const imagemAtual = document.getElementById('imagem-atual');
+
+
+
+        let graficos = {};
         
         // Inicializar página
         if (usuarioLogado) {
@@ -151,7 +230,7 @@
                 alert('Sessão expirada. Por favor, faça login novamente.');
                 window.location.reload();
             }
-        }, 30 * 60 * 1000); // 30 minutos
+        }, 30 * 60 * 1000);
         
         function mostrarAreaLogin() {
             loginArea.style.display = 'block';
@@ -165,6 +244,8 @@
         
         // ==================== FUNÇÕES DE PRODUTOS ====================
         let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+        let produtoEditando = null;
+        let novaImagemSelecionada = false;
         
         function salvarProdutos() {
             localStorage.setItem('produtos', JSON.stringify(produtos));
@@ -202,12 +283,21 @@
                         <p>${formatarPreco(produto.preco)} • Estoque: ${produto.estoque}</p>
                         <p><small>Categoria: ${produto.categoria}</small></p>
                     </div>
-                    <button class="btn-eliminar" data-id="${produto.id}">
-                        Eliminar
-                    </button>
+                    <div class="produto-admin-botoes">
+                        <button class="btn-editar" data-id="${produto.id}">
+                            Editar
+                        </button>
+                        <button class="btn-eliminar" data-id="${produto.id}">
+                            Eliminar
+                        </button>
+                    </div>
                 `;
                 lista.appendChild(item);
             });
+
+            if (usuarioLogado && produtos.length > 0) {
+                criarGraficos();
+            }
         }
         
         // Cadastrar produto
@@ -268,7 +358,119 @@
             leitor.readAsDataURL(arquivo);
         });
         
-        // Eliminar produto
+        // ==================== FUNÇÕES DE EDIÇÃO ====================
+        function abrirModalEdicao(id) {
+            produtoEditando = produtos.find(p => p.id === id);
+            if (!produtoEditando) return;
+            
+            // Preencher formulário com dados atuais
+            document.getElementById('editar-id').value = produtoEditando.id;
+            document.getElementById('editar-nome').value = produtoEditando.nome;
+            document.getElementById('editar-preco').value = produtoEditando.preco;
+            document.getElementById('editar-estoque').value = produtoEditando.estoque;
+            document.getElementById('editar-categoria').value = produtoEditando.categoria;
+            imagemAtual.src = produtoEditando.imagem;
+            
+            // Resetar controle de nova imagem
+            novaImagemSelecionada = false;
+            inputNovaImagem.value = '';
+            
+            // Mostrar modal
+            modalEdicao.style.display = 'flex';
+        }
+        
+        function fecharModal() {
+            modalEdicao.style.display = 'none';
+            produtoEditando = null;
+            novaImagemSelecionada = false;
+        }
+        
+        // Eventos do modal
+        btnFecharModal.addEventListener('click', fecharModal);
+        modalEdicao.addEventListener('click', function(e) {
+            if (e.target === modalEdicao) {
+                fecharModal();
+            }
+        });
+        
+        // Botão para trocar imagem
+        btnTrocarImagem.addEventListener('click', function() {
+            inputNovaImagem.click();
+        });
+        
+        // Selecionar nova imagem
+        inputNovaImagem.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                novaImagemSelecionada = true;
+                const leitor = new FileReader();
+                leitor.onload = function(e) {
+                    imagemAtual.src = e.target.result;
+                };
+                leitor.readAsDataURL(e.target.files[0]);
+            }
+        });
+        
+        // Salvar alterações
+        formEditar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!produtoEditando) return;
+            
+            // Obter novos valores
+            const novoNome = document.getElementById('editar-nome').value;
+            const novoPreco = parseFloat(document.getElementById('editar-preco').value);
+            const novoEstoque = parseInt(document.getElementById('editar-estoque').value);
+            const novaCategoria = document.getElementById('editar-categoria').value;
+            
+            // Validações
+            if (!novoNome || !novoPreco || isNaN(novoEstoque) || !novaCategoria) {
+                alert('Preencha todos os campos corretamente!');
+                return;
+            }
+            
+            if (novoPreco <= 0) {
+                alert('O preço deve ser maior que zero!');
+                return;
+            }
+            
+            if (novoEstoque < 0) {
+                alert('O estoque não pode ser negativo!');
+                return;
+            }
+            
+            // Atualizar produto
+            const indice = produtos.findIndex(p => p.id === produtoEditando.id);
+            
+            if (indice !== -1) {
+                // Atualizar dados básicos
+                produtos[indice].nome = novoNome;
+                produtos[indice].preco = novoPreco;
+                produtos[indice].estoque = novoEstoque;
+                produtos[indice].categoria = novaCategoria;
+                
+                // Atualizar imagem se foi selecionada uma nova
+                if (novaImagemSelecionada && inputNovaImagem.files[0]) {
+                    const leitor = new FileReader();
+                    leitor.onload = function(e) {
+                        produtos[indice].imagem = e.target.result;
+                        salvarProdutos();
+                        carregarProdutos();
+                        fecharModal();
+                        alert(`✅ Produto "${novoNome}" atualizado com sucesso!`);
+                    };
+                    leitor.readAsDataURL(inputNovaImagem.files[0]);
+                } else {
+                    salvarProdutos();
+                    carregarProdutos();
+                    fecharModal();
+                    alert(`✅ Produto "${novoNome}" atualizado com sucesso!`);
+                }
+            }
+
+            atualizarGraficos();
+        });
+        
+        // Eventos de clique
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('btn-eliminar')) {
                 const id = parseInt(e.target.getAttribute('data-id'));
@@ -280,9 +482,17 @@
                     
                     // Recarrega a lista
                     carregarProdutos();
+
+                    atualizarGraficos();
                     
                     alert('Produto eliminado com sucesso!');
                 }
+            }
+            
+            // Evento para botão de editar
+            if (e.target.classList.contains('btn-editar')) {
+                const id = parseInt(e.target.getAttribute('data-id'));
+                abrirModalEdicao(id);
             }
         });
         
@@ -290,6 +500,139 @@
         if (usuarioLogado) {
             carregarProdutos();
         }
+
+
+        // ==================== FUNÇÕES DOS GRÁFICOS ====================
+        
+
+        function criarGraficos() {
+            // Dados para os gráficos
+            const categorias = ['eletronicos', 'vestuario', 'livros', 'moveis'];
+            const nomesCategorias = ['Eletrônicos', 'Vestuário', 'Livros', 'Móveis'];
+            
+            // Calcular dados
+            const contagemPorCategoria = {};
+            const estoquePorCategoria = {};
+            const valorPorCategoria = {};
+            
+            categorias.forEach(cat => {
+                contagemPorCategoria[cat] = 0;
+                estoquePorCategoria[cat] = 0;
+                valorPorCategoria[cat] = 0;
+            });
+            
+            produtos.forEach(produto => {
+                contagemPorCategoria[produto.categoria]++;
+                estoquePorCategoria[produto.categoria] += produto.estoque;
+                valorPorCategoria[produto.categoria] += produto.preco * produto.estoque;
+            });
+            
+            // Destruir gráficos anteriores se existirem
+            Object.values(graficos).forEach(grafico => {
+                if (grafico) grafico.destroy();
+            });
+            
+            // 1. Gráfico de Produtos por Categoria (Pizza ou Doughnut)
+            const ctxCategorias = document.getElementById('grafico-categorias');
+            graficos.categorias = new Chart(ctxCategorias, {
+                type: 'doughnut',
+                data: {
+                    labels: nomesCategorias,
+                    datasets: [{
+                        data: categorias.map(cat => contagemPorCategoria[cat]),
+                        backgroundColor: [
+                            '#FF6384', // eletronicos
+                            '#36A2EB', // vestuario
+                            '#FFCE56', // livros
+                            '#4BC0C0'  // moveis
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // 2. Gráfico de Estoque por Categoria (Barras)
+            const ctxEstoque = document.getElementById('grafico-estoque');
+            graficos.estoque = new Chart(ctxEstoque, {
+                type: 'bar',
+                data: {
+                    labels: nomesCategorias,
+                    datasets: [{
+                        label: 'Quantidade em Estoque',
+                        data: categorias.map(cat => estoquePorCategoria[cat]),
+                        backgroundColor: '#3498db',
+                        borderColor: '#2980b9',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Quantidade'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 3. Gráfico de Valor Total em Estoque (Barras)
+            const ctxValor = document.getElementById('grafico-valor-estoque');
+            graficos.valor = new Chart(ctxValor, {
+                type: 'bar',
+                data: {
+                    labels: nomesCategorias,
+                    datasets: [{
+                        label: 'Valor Total (kz)',
+                        data: categorias.map(cat => valorPorCategoria[cat]),
+                        backgroundColor: '#2ecc71',
+                        borderColor: '#27ae60',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Valor (kz)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    // Formata o preço diretamente aqui
+                                    const valor = context.raw;
+                                    return `Valor: ${valor.toFixed(2).replace('.', ',')} kz`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function atualizarGraficos() {
+            if (graficos.categorias) {
+                criarGraficos(); // Recria todos os gráficos
+            }
+        }
+
     </script>
 </body>
 </html>
