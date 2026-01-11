@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - TechStore</title>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="estiloAdmin.css">
 </head>
@@ -44,31 +43,144 @@
                 <a href="index.html" class="btn-voltar">← Voltar à Loja</a>
             </div>
             
-            <div class="admin-grid">
-                <!-- Seção Cadastro de Produtos -->
-                <div class="admin-section">
-                    <h3>Cadastrar Novo Produto</h3>
-                    <form id="formulario-admin">
-                        <div class="form-group">
-                            <label for="admin-nome">Nome do Produto</label>
-                            <input type="text" id="admin-nome" required>
+            <div class="admin-layout">
+                <!-- Menu Lateral -->
+                <div class="admin-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Menu</h3>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <button class="nav-item active" data-page="dashboard">
+                            📊 Dashboard
+                        </button>
+                        <button class="nav-item" data-page="cadastrar">
+                            ➕ Cadastrar Produto
+                        </button>
+                        <button class="nav-item" data-page="gerenciar">
+                            📋 Gerenciar Produtos
+                        </button>
+                    </nav>
+                    <div class="sidebar-footer">
+                        <button id="btn-logout" class="btn-logout">
+                            🚪 Sair
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Conteúdo Principal -->
+                <div class="admin-main">
+                    <!-- Página Dashboard -->
+                    <div id="page-dashboard" class="admin-page active">
+                        <div class="page-header">
+                            <h3>📊 Dashboard</h3>
+                            <p>Análise e estatísticas dos produtos</p>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="admin-preco">Preço (kz)</label>
-                            <input type="number" id="admin-preco" step="0.01" min="0" required>
+                        <!-- Cards de Resumo -->
+                        <div class="resumo-cards">
+                            <div class="resumo-card">
+                                <h4>Total de Produtos</h4>
+                                <p class="resumo-numero" id="total-produtos-card">0</p>
+                            </div>
+                            <div class="resumo-card">
+                                <h4>Estoque Total</h4>
+                                <p class="resumo-numero" id="total-estoque">0</p>
+                            </div>
+                            <div class="resumo-card">
+                                <h4>Valor Total em Estoque</h4>
+                                <p class="resumo-numero" id="valor-total-estoque">0 kz</p>
+                            </div>
+                            <div class="resumo-card">
+                                <h4>Categorias</h4>
+                                <p class="resumo-numero" id="total-categorias">4</p>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="admin-estoque">Estoque Disponível</label>
-                            <input type="number" id="admin-estoque" min="0" required>
-                            <small style="color: #666;">Quantidade disponível em estoque</small>
+                        <!-- Gráficos -->
+                        <div class="graficos-container">
+                            <div class="grafico-card">
+                                <h4>Produtos por Categoria</h4>
+                                <canvas id="grafico-categorias"></canvas>
+                            </div>
+                            <div class="grafico-card">
+                                <h4>Estoque Total por Categoria</h4>
+                                <canvas id="grafico-estoque"></canvas>
+                            </div>
+                            <div class="grafico-card">
+                                <h4>Valor Total em Estoque (kz)</h4>
+                                <canvas id="grafico-valor-estoque"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Página Cadastrar -->
+                    <div id="page-cadastrar" class="admin-page">
+                        <div class="page-header">
+                            <h3>➕ Cadastrar Novo Produto</h3>
+                            <p>Preencha os dados do novo produto</p>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="admin-categoria">Categoria</label>
-                            <select id="admin-categoria" required>
-                                <option value="">Selecione...</option>
+                        <div class="form-container">
+                            <form id="formulario-admin">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="admin-nome">Nome do Produto</label>
+                                        <input type="text" id="admin-nome" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="admin-preco">Preço (kz)</label>
+                                        <input type="number" id="admin-preco" step="0.01" min="0" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="admin-estoque">Estoque Disponível</label>
+                                        <input type="number" id="admin-estoque" min="0" required>
+                                        <small>Quantidade disponível em estoque</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="admin-categoria">Categoria</label>
+                                        <select id="admin-categoria" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="eletronicos">Eletrônicos</option>
+                                            <option value="vestuario">Vestuário</option>
+                                            <option value="livros">Livros</option>
+                                            <option value="moveis">Móveis</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group full-width">
+                                        <label for="admin-imagem">Imagem do Produto</label>
+                                        <div class="imagem-upload">
+                                            <input type="file" id="admin-imagem" accept="image/*" required>
+                                            <small>Use imagens quadradas para melhor visualização</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-submit">Cadastrar Produto</button>
+                                    <button type="button" class="btn-limpar" id="btn-limpar">Limpar Formulário</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Página Gerenciar -->
+                    <div id="page-gerenciar" class="admin-page">
+                        <div class="page-header">
+                            <h3>📋 Gerenciar Produtos</h3>
+                            <p>Visualize, edite ou elimine produtos cadastrados</p>
+                        </div>
+                        
+                        <div class="filtros">
+                            <div class="search-box">
+                                <input type="text" id="search-input" placeholder="Buscar produto...">
+                                <button class="btn-search">🔍</button>
+                            </div>
+                            <select id="filter-categoria" class="filter-select">
+                                <option value="">Todas as categorias</option>
                                 <option value="eletronicos">Eletrônicos</option>
                                 <option value="vestuario">Vestuário</option>
                                 <option value="livros">Livros</option>
@@ -76,42 +188,14 @@
                             </select>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="admin-imagem">Imagem do Produto</label>
-                            <input type="file" id="admin-imagem" accept="image/*" required>
-                            <small style="color: #666; display: block; margin-top: 5px;">Use imagens quadradas para melhor visualização</small>
+                        <div class="produtos-info">
+                            <p>Total de produtos: <span id="total-produtos">0</span></p>
+                            <p>Produtos filtrados: <span id="produtos-filtrados">0</span></p>
                         </div>
                         
-                        <button type="submit" class="btn-submit">Cadastrar Produto</button>
-                    </form>
-                </div>
-
-                <!-- Gráficos de Análise -->
-                <div class="admin-section">
-                    <h3>Análise de Produtos</h3>
-                    <div class="graficos-container">
-                        <div class="grafico-card">
-                            <h4>Produtos por Categoria</h4>
-                            <canvas id="grafico-categorias"></canvas>
+                        <div class="produtos-lista" id="lista-produtos">
+                            <!-- Produtos serão listados aqui -->
                         </div>
-                        <div class="grafico-card">
-                            <h4>Estoque Total por Categoria</h4>
-                            <canvas id="grafico-estoque"></canvas>
-                        </div>
-                        <div class="grafico-card">
-                            <h4>Valor Total em Estoque (kz)</h4>
-                            <canvas id="grafico-valor-estoque"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Seção Gerenciar Produtos -->
-                <div class="admin-section">
-                    <h3>Produtos Cadastrados</h3>
-                    <p>Total: <span id="total-produtos">0</span> produtos</p>
-                    
-                    <div class="produtos-lista" id="lista-produtos">
-                        <!-- Produtos serão listados aqui -->
                     </div>
                 </div>
             </div>
@@ -163,7 +247,10 @@
                     <input type="file" id="nova-imagem" accept="image/*" style="display: none;">
                 </div>
                 
-                <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                    <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -189,9 +276,11 @@
         const btnTrocarImagem = document.getElementById('btn-trocar-imagem');
         const inputNovaImagem = document.getElementById('nova-imagem');
         const imagemAtual = document.getElementById('imagem-atual');
-
-
-
+        
+        // Variáveis globais
+        let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+        let produtoEditando = null;
+        let novaImagemSelecionada = false;
         let graficos = {};
         
         // Inicializar página
@@ -214,6 +303,8 @@
                 usuarioLogado = true;
                 mostrarAreaAdmin();
                 carregarProdutos();
+                carregarResumo();
+                inicializarNavegacao();
             } else {
                 // Login falhou
                 mensagemErro.style.display = 'block';
@@ -242,11 +333,60 @@
             adminArea.style.display = 'block';
         }
         
-        // ==================== FUNÇÕES DE PRODUTOS ====================
-        let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
-        let produtoEditando = null;
-        let novaImagemSelecionada = false;
+        // ==================== FUNÇÕES DE NAVEGAÇÃO ====================
+        function inicializarNavegacao() {
+            // Botões do menu
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove classe active de todos
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    document.querySelectorAll('.admin-page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // Adiciona classe active no botão clicado
+                    this.classList.add('active');
+                    
+                    // Mostra a página correspondente
+                    const pageId = this.getAttribute('data-page');
+                    document.getElementById(`page-${pageId}`).classList.add('active');
+                    
+                    // Se for dashboard, atualiza gráficos
+                    if (pageId === 'dashboard') {
+                        criarGraficos();
+                    }
+                });
+            });
+            
+            // Botão de logout
+            document.getElementById('btn-logout').addEventListener('click', function() {
+                localStorage.removeItem('admin_logado');
+                window.location.reload();
+            });
+            
+            // Botão limpar formulário
+            document.getElementById('btn-limpar')?.addEventListener('click', function() {
+                document.getElementById('admin-nome').value = '';
+                document.getElementById('admin-preco').value = '';
+                document.getElementById('admin-estoque').value = '';
+                document.getElementById('admin-categoria').value = '';
+                document.getElementById('admin-imagem').value = '';
+            });
+            
+            // Filtro de busca
+            document.getElementById('search-input')?.addEventListener('input', function() {
+                filtrarProdutos();
+            });
+            
+            // Filtro por categoria
+            document.getElementById('filter-categoria')?.addEventListener('change', function() {
+                filtrarProdutos();
+            });
+        }
         
+        // ==================== FUNÇÕES DE PRODUTOS ====================
         function salvarProdutos() {
             localStorage.setItem('produtos', JSON.stringify(produtos));
         }
@@ -255,18 +395,43 @@
             return `${preco.toFixed(2).replace('.', ',')} kz`;
         }
         
-        function carregarProdutos() {
+        function carregarResumo() {
+            // Calcular totais
+            const totalProdutos = produtos.length;
+            const totalEstoque = produtos.reduce((sum, prod) => sum + prod.estoque, 0);
+            const valorTotalEstoque = produtos.reduce((sum, prod) => sum + (prod.preco * prod.estoque), 0);
+            
+            // Atualizar cards
+            document.getElementById('total-produtos-card').textContent = totalProdutos;
+            document.getElementById('total-estoque').textContent = totalEstoque;
+            document.getElementById('valor-total-estoque').textContent = formatarPreco(valorTotalEstoque);
+        }
+        
+        function filtrarProdutos() {
+            const termo = document.getElementById('search-input').value.toLowerCase();
+            const categoria = document.getElementById('filter-categoria').value;
+            
+            const produtosFiltrados = produtos.filter(produto => {
+                const matchNome = produto.nome.toLowerCase().includes(termo);
+                const matchCategoria = !categoria || produto.categoria === categoria;
+                return matchNome && matchCategoria;
+            });
+            
+            // Atualizar contador
+            document.getElementById('produtos-filtrados').textContent = produtosFiltrados.length;
+            
+            // Renderizar produtos filtrados
+            renderizarProdutos(produtosFiltrados);
+        }
+        
+        function renderizarProdutos(listaProdutos) {
             const lista = document.getElementById('lista-produtos');
-            const totalSpan = document.getElementById('total-produtos');
             
-            // Atualiza contador
-            totalSpan.textContent = produtos.length;
-            
-            if (produtos.length === 0) {
+            if (listaProdutos.length === 0) {
                 lista.innerHTML = `
                     <div style="text-align: center; padding: 2rem; color: #666;">
-                        <p>Nenhum produto cadastrado.</p>
-                        <p>Use o formulário ao lado para adicionar produtos.</p>
+                        <p>Nenhum produto encontrado.</p>
+                        <p>Tente alterar os filtros de busca.</p>
                     </div>
                 `;
                 return;
@@ -274,14 +439,19 @@
             
             // Renderiza lista de produtos
             lista.innerHTML = '';
-            produtos.forEach((produto, index) => {
+            listaProdutos.forEach((produto, index) => {
                 const item = document.createElement('div');
                 item.className = 'produto-admin-item';
                 item.innerHTML = `
-                    <div class="produto-admin-info">
-                        <h4>${produto.nome}</h4>
-                        <p>${formatarPreco(produto.preco)} • Estoque: ${produto.estoque}</p>
-                        <p><small>Categoria: ${produto.categoria}</small></p>
+                    <div class="produto-info">
+                        <div class="produto-imagem-small">
+                            <img src="${produto.imagem}" alt="${produto.nome}">
+                        </div>
+                        <div class="produto-detalhes">
+                            <h4>${produto.nome}</h4>
+                            <p>${formatarPreco(produto.preco)} • Estoque: ${produto.estoque}</p>
+                            <p><small>Categoria: ${produto.categoria}</small></p>
+                        </div>
                     </div>
                     <div class="produto-admin-botoes">
                         <button class="btn-editar" data-id="${produto.id}">
@@ -294,7 +464,20 @@
                 `;
                 lista.appendChild(item);
             });
-
+        }
+        
+        function carregarProdutos() {
+            // Atualizar contadores
+            document.getElementById('total-produtos').textContent = produtos.length;
+            document.getElementById('produtos-filtrados').textContent = produtos.length;
+            
+            // Carregar resumo
+            carregarResumo();
+            
+            // Renderizar produtos
+            renderizarProdutos(produtos);
+            
+            // Criar gráficos
             if (usuarioLogado && produtos.length > 0) {
                 criarGraficos();
             }
@@ -348,11 +531,14 @@
                 // Limpa formulário
                 document.getElementById('admin-nome').value = '';
                 document.getElementById('admin-preco').value = '';
-                document.getElementById('admin-estoque').value = '10';
+                document.getElementById('admin-estoque').value = '';
                 document.getElementById('admin-categoria').value = '';
                 document.getElementById('admin-imagem').value = '';
                 
                 alert(`✅ Produto "${nome}" cadastrado com sucesso!`);
+                
+                // Vai para a página de gerenciar
+                document.querySelector('[data-page="gerenciar"]').click();
             };
             
             leitor.readAsDataURL(arquivo);
@@ -466,8 +652,6 @@
                     alert(`✅ Produto "${novoNome}" atualizado com sucesso!`);
                 }
             }
-
-            atualizarGraficos();
         });
         
         // Eventos de clique
@@ -482,8 +666,6 @@
                     
                     // Recarrega a lista
                     carregarProdutos();
-
-                    atualizarGraficos();
                     
                     alert('Produto eliminado com sucesso!');
                 }
@@ -501,10 +683,7 @@
             carregarProdutos();
         }
 
-
         // ==================== FUNÇÕES DOS GRÁFICOS ====================
-        
-
         function criarGraficos() {
             // Dados para os gráficos
             const categorias = ['eletronicos', 'vestuario', 'livros', 'moveis'];
@@ -632,6 +811,19 @@
                 criarGraficos(); // Recria todos os gráficos
             }
         }
+
+        // Verificar se DOM está carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM carregado");
+            
+            // Se já estiver logado, inicializar navegação
+            if (usuarioLogado) {
+                // Pequeno delay para garantir que o DOM está pronto
+                setTimeout(function() {
+                    inicializarNavegacao();
+                }, 100);
+            }
+        });
 
     </script>
 </body>
