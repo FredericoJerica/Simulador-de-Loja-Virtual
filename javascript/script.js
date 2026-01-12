@@ -1,11 +1,14 @@
+// ==================== CONFIGURAÇÕES ====================
+const API_URL = 'http://localhost:3000';  // JSON Server
+
 // ==================== DADOS INICIAIS ====================
-let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+let produtos = [];
 let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 let categoriaAtiva = 'todos';
 
 // ==================== FUNÇÕES UTILITÁRIAS ====================
 function salvarLocalStorage() {
-    localStorage.setItem('produtos', JSON.stringify(produtos));
+    // Agora só salva o carrinho
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
 }
 
@@ -24,10 +27,29 @@ function formatarNomeCategoria(categoria) {
     return nomes[categoria] || categoria;
 }
 
-// ==================== FUNÇÕES DE PRODUTOS ====================
-function renderizarProdutos(categoria = 'todos') {
+// ==================== FUNÇÕES DE PRODUTOS (JSON SERVER) ====================
+async function carregarProdutosDoServidor() {
+    try {
+        const response = await fetch(`${API_URL}/produtos`);
+        if (!response.ok) throw new Error('Erro ao carregar produtos');
+        produtos = await response.json();
+        console.log('Produtos carregados:', produtos);
+    } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        produtos = [];
+    }
+}
+
+async function renderizarProdutos(categoria = 'todos') {
     const container = document.getElementById('catalogo-produtos');
     const titulo = document.getElementById('titulo-catalogo');
+    
+    // Mostra loading
+    container.innerHTML = '<div class="loading">Carregando produtos...</div>';
+    
+    // Carrega produtos do servidor
+    await carregarProdutosDoServidor();
+    
     container.innerHTML = '';
     
     // Atualiza título
@@ -45,16 +67,16 @@ function renderizarProdutos(categoria = 'todos') {
         container.innerHTML = `
             <div style="text-align: center; padding: 3rem; color: #666;">
                 <p style="font-size: 1.2rem; margin-bottom: 1rem;">Nenhum produto encontrado</p>
-                <p>Use o Modo Administrador para cadastrar novos produtos</p>
             </div>
         `;
+        atualizarContadoresCategorias();
         return;
     }
     
-    // Renderiza cada produto
     produtosParaExibir.forEach(produto => {
         const card = document.createElement('div');
         card.className = 'produto-card';
+        
         card.innerHTML = `
             <img src="${produto.imagem}" alt="${produto.nome}" class="produto-imagem">
             <div class="produto-info">
@@ -63,6 +85,11 @@ function renderizarProdutos(categoria = 'todos') {
                 <p class="produto-estoque" style="color: ${produto.estoque > 0 ? '#27ae60' : '#e74c3c'};">
                     ${produto.estoque > 0 ? `📦 Estoque: ${produto.estoque}` : '❌ Esgotado'}
                 </p>
+                ${produto.descricao ? `
+                    <a href="#" class="ver-descricao" data-id="${produto.id}">
+                        📄 Ver descrição completa
+                    </a>
+                ` : '<p class="sem-descricao">Sem descrição</p>'}
                 <button class="btn-adicionar" data-id="${produto.id}" 
                     ${produto.estoque <= 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
                     ${produto.estoque > 0 ? 'Adicionar ao Carrinho' : 'Produto Esgotado'}
@@ -262,97 +289,33 @@ function alterarQuantidadeInput(index, novaQuantidade) {
     salvarLocalStorage();
 }
 
-// ==================== FUNÇÕES ADMINISTRATIVAS ====================
-function alternarModoAdmin() {
-    const form = document.getElementById('formulario-admin');
-    form.classList.toggle('ativo');
-}
-
-function cadastrarProduto(event) {
-    event.preventDefault();
-    
-    const nome = document.getElementById('admin-nome').value;
-    const preco = parseFloat(document.getElementById('admin-preco').value);
-    const categoria = document.getElementById('admin-categoria').value;
-    const estoque = parseInt(document.getElementById('admin-estoque').value);
-    const inputImagem = document.getElementById('admin-imagem');
-    
-    // Validação
-    if (!nome || !preco || isNaN(estoque) || !categoria || inputImagem.files.length === 0) {
-        alert('Preencha todos os campos corretamente!');
-        return;
-    }
-    
-    if (preco <= 0) {
-        alert('O preço deve ser maior que zero!');
-        return;
-    }
-    
-    if (estoque < 0) {
-        alert('O estoque não pode ser negativo!');
-        return;
-    }
-    
-    const arquivo = inputImagem.files[0];
-    const leitor = new FileReader();
-    
-    leitor.onload = function(e) {
-        const novoProduto = {
-            id: Date.now(),
-            nome: nome,
-            preco: preco,
-            categoria: categoria,
-            estoque: estoque,
-            imagem: e.target.result
-        };
-        
-        produtos.push(novoProduto);
-        salvarLocalStorage();
-        
-        // Atualiza interface
-        renderizarProdutos(categoriaAtiva);
-        gerarBotoesCategorias();
-        
-        // Limpa formulário (mantém estoque em 10 como padrão)
-        document.getElementById('admin-nome').value = '';
-        document.getElementById('admin-preco').value = '';
-        document.getElementById('admin-estoque').value = '10';
-        document.getElementById('admin-categoria').value = '';
-        document.getElementById('admin-imagem').value = '';
-        
-        alert(`Produto "${nome}" cadastrado com sucesso!\n\nEstoque: ${estoque} unidades\nPreço: ${formatarPreco(preco)}`);
-    };
-    
-    leitor.readAsDataURL(arquivo);
-}
 
 // ==================== FUNÇÃO DE RESET ====================
-function resetarSistema() {
-    if (confirm("⚠️ ATENÇÃO!\n\nEsta ação irá:\n1. Apagar TODOS os produtos cadastrados\n2. Limpar o carrinho\n3. Zerar todo o sistema\n\nTem certeza que deseja continuar?")) {
-        // Limpa tudo
-        localStorage.clear();
-        produtos = [];
+function limparCarrinho() {
+    if (confirm("⚠️ ATENÇÃO!\n\nEsta ação irá:\n1. Limpar o carrinho\n\nTem certeza que deseja continuar?")) {
+        // Limpa apenas o carrinho (produtos ficam no JSON Server)
         carrinho = [];
+        localStorage.removeItem('carrinho');
         
         // Atualiza interface
-        renderizarProdutos();
         atualizarCarrinho();
-        gerarBotoesCategorias();
         
         // Fecha carrinho se estiver aberto
         document.getElementById('carrinho-sidebar').classList.remove('ativo');
         document.getElementById('overlay').style.display = 'none';
         
-        alert('✅ Sistema resetado com sucesso!\n\nO sistema está vazio. Use o Modo Administrador para cadastrar novos produtos.');
+        alert('✅ Carrinho limpo com sucesso!');
     }
 }
 
 // ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializa interface
-    gerarBotoesCategorias();
-    renderizarProdutos();
-    atualizarCarrinho();
+    carregarProdutosDoServidor().then(() => {
+        gerarBotoesCategorias();
+        renderizarProdutos();
+        atualizarCarrinho();
+    });
     
     // Delegar eventos para elementos dinâmicos
     document.addEventListener('click', function(e) {
@@ -374,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Adicionar ao carrinho
         if (e.target.closest('.btn-adicionar')) {
-            const id = parseInt(e.target.closest('.btn-adicionar').getAttribute('data-id'));
+            const id = e.target.closest('.btn-adicionar').getAttribute('data-id');
             adicionarAoCarrinho(id);
         }
         
@@ -418,21 +381,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-            alert(`✅ Compra finalizada!\n\nTotal: ${formatarPreco(total)}`);
-            carrinho = [];
-            atualizarCarrinho();
-            salvarLocalStorage();
+             const usuarioLogado = JSON.parse(localStorage.getItem('usuario_logado'));
+    
+            if (!usuarioLogado || usuarioLogado.tipo !== 'cliente') {
+                console.log('Chegou')
+                // Usuário não está logado como cliente
+                if (confirm('Para finalizar a compra, você precisa estar logado.\n\nSerá redirecionado para a página de login?')) {
+                    window.location.href = 'html/login.html'; // Ajuste o caminho conforme necessário
+                }
+                return;
+            } 
+            
         }
         
-        // Modo admin
-        if (e.target.id === 'btn-admin') {
-            alternarModoAdmin();
-        }
-        
-        // Resetar sistema
+        // Resetar sistema (apenas carrinho)
         if (e.target.id === 'btn-resetar') {
-            resetarSistema();
+            limparCarrinho();
+        }
+
+        // Abrir modal de descrição
+        if (e.target.classList.contains('ver-descricao')) {
+            e.preventDefault();
+            const id = e.target.getAttribute('data-id');
+            abrirModalDescricao(id);
+        }
+        
+        // Fechar modal ao clicar no X
+        if (e.target.classList.contains('fechar-modal-descricao')) {
+            fecharModalDescricao();
+        }
+        
+        // Fechar modal ao clicar fora
+        if (e.target.id === 'modal-descricao') {
+            fecharModalDescricao();
         }
     });
     
@@ -457,16 +438,68 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Formulário admin
-    const formAdmin = document.getElementById('formulario-admin');
-    if (formAdmin) {
-        formAdmin.addEventListener('submit', cadastrarProduto);
-    }
+    
 });
 
 // ==================== INICIALIZAÇÃO ====================
-// Garante que existe um array vazio se não houver dados
-if (!Array.isArray(produtos)) {
-    produtos = [];
-    localStorage.setItem('produtos', JSON.stringify(produtos));
+// Garante que existe um array vazio para o carrinho
+if (!Array.isArray(carrinho)) {
+    carrinho = [];
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
 }
+
+// Variável global para o produto atual no modal
+let produtoModalAtual = null;
+
+// Função para abrir modal com descrição
+function abrirModalDescricao(id) {
+    produtoModalAtual = produtos.find(p => p.id === id);
+    if (!produtoModalAtual) return;
+    
+    // Preencher modal
+    document.getElementById('modal-descricao-titulo').textContent = produtoModalAtual.nome;
+    document.getElementById('modal-descricao-preco').textContent = formatarPreco(produtoModalAtual.preco);
+    document.getElementById('modal-descricao-imagem').src = produtoModalAtual.imagem;
+    document.getElementById('modal-descricao-imagem').alt = produtoModalAtual.nome;
+    document.getElementById('modal-descricao-texto').textContent = produtoModalAtual.descricao || 'Sem descrição disponível.';
+    
+    // Configurar estoque
+    const estoqueElement = document.getElementById('modal-descricao-estoque');
+    estoqueElement.textContent = produtoModalAtual.estoque > 0 ? 
+        `📦 ${produtoModalAtual.estoque} unidades disponíveis` : 
+        '❌ Produto esgotado';
+    estoqueElement.className = produtoModalAtual.estoque > 0 ? 'modal-estoque disponivel' : 'modal-estoque esgotado';
+    
+    // Configurar botão adicionar
+    const btnAdicionar = document.getElementById('modal-btn-adicionar');
+    if (produtoModalAtual.estoque > 0) {
+        btnAdicionar.disabled = false;
+        btnAdicionar.textContent = '🛒 Adicionar ao Carrinho';
+        btnAdicionar.onclick = () => {
+            adicionarAoCarrinho(id);
+            fecharModalDescricao();
+        };
+    } else {
+        btnAdicionar.disabled = true;
+        btnAdicionar.textContent = 'Produto Esgotado';
+    }
+    
+    // Mostrar modal
+    document.getElementById('modal-descricao').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Previne scroll da página
+}
+
+// Função para fechar modal
+function fecharModalDescricao() {
+    document.getElementById('modal-descricao').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restaura scroll
+    produtoModalAtual = null;
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('modal-descricao').style.display === 'block') {
+        fecharModalDescricao();
+    }
+});
+
+window.adicionarAoCarrinho = adicionarAoCarrinho;

@@ -913,3 +913,35 @@ header {
 .resumo-card {
     animation: fadeIn 0.5s ease;
 }
+
+/* ================ MANTENHA ESTAS SEÇÕES ================ */
+
+/* CARRINHO SIDEBAR - MANTENHA INTACTO */
+#carrinho-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 380px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 2rem;
+    overflow-y: auto;
+    transition: right 0.4s ease;
+    z-index: 1000;
+}
+
+#carrinho-sidebar.ativo {
+    right: 0;
+}
+
+.carrinho-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+}
+
+/* ... resto dos estilos do carrinho ... */

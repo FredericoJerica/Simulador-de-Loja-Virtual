@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loja Virtual</title>
-    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
                     </button>
                 </div>
 
-                <a href="login.html" style="
+                <a href="html/login.html" style="
                 background: linear-gradient(135deg, #4a6491 0%, #6a84b1 100%);
                 color: white;
                 padding: 0.7rem 1.3rem;
@@ -165,6 +165,33 @@
         </footer>
 
 
-   <script src="script.js"></script>
+        <!-- Modal para descrição do produto -->
+        <div id="modal-descricao" class="modal-descricao">
+            <div class="modal-descricao-content">
+                <span class="fechar-modal-descricao">&times;</span>
+                <div class="modal-descricao-header">
+                    <h3 id="modal-descricao-titulo"></h3>
+                    <p id="modal-descricao-preco" class="modal-preco"></p>
+                </div>
+                <div class="modal-descricao-body">
+                    <div class="modal-imagem-container">
+                        <img id="modal-descricao-imagem" src="" alt="" class="modal-imagem">
+                    </div>
+                    <div class="modal-info-container">
+                        <div class="modal-estoque-container">
+                            <span id="modal-descricao-estoque" class="modal-estoque"></span>
+                        </div>
+                        <h4>Descrição:</h4>
+                        <p id="modal-descricao-texto" class="modal-texto"></p>
+                        <button id="modal-btn-adicionar" class="modal-btn-adicionar">
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+   <script src="javascript/script.js"></script>
 </body>
 </html>

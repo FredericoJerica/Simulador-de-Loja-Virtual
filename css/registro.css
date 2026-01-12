@@ -1,0 +1,298 @@
+/* ================ PÁGINA DE REGISTRO ================ */
+        body.pagina-registro {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .registro-container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .registro-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .registro-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .registro-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .registro-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8f9fa;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a6491;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 100, 145, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+        }
+
+        .form-group input.success {
+            border-color: #27ae60;
+            background: #f0fff4;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-meter {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+        }
+
+        .strength-weak { background: #ff6b6b; }
+        .strength-medium { background: #f39c12; }
+        .strength-strong { background: #27ae60; }
+
+        .strength-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: right;
+            color: #666;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+
+        .show-password:hover {
+            color: #4a6491;
+        }
+
+        .btn-registro {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4a6491, #2c3e50);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .btn-registro:hover {
+            background: linear-gradient(135deg, #3a5481, #1c2c40);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 100, 145, 0.3);
+        }
+
+        .btn-registro:active {
+            transform: translateY(0);
+        }
+
+        .btn-registro:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: #4a6491;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
+
+        .mensagem-sucesso {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+            font-size: 0.95rem;
+        }
+
+        .mensagem-erro {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #f5c6cb;
+            font-size: 0.95rem;
+        }
+
+        .termos-condicoes {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .termos-condicoes a {
+            color: #4a6491;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .termos-condicoes a:hover {
+            text-decoration: underline;
+            color: #2c3e50;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #4a6491;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .btn-voltar:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsividade para registro */
+        @media (max-width: 480px) {
+            .registro-container {
+                max-width: 100%;
+                border-radius: 12px;
+            }
+            
+            .registro-form {
+                padding: 20px;
+            }
+            
+            .registro-header {
+                padding: 25px 15px;
+            }
+            
+            .registro-header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .btn-registro {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            .form-group input {
+                padding: 12px 14px;
+                font-size: 15px;
+            }
+        }

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - FreOde</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../css/estiloAdmin.css">
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">🛒</span>
+                <span>FreOde Admin</span>
+            </div>
+        </div>
+    </header>
+
+    
+
+    <div id="admin-area" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>Painel Administrativo</h2>
+                <a href="../index.html" class="btn-voltar">← Voltar à Loja</a>
+            </div>
+            
+            <div class="admin-layout">
+                <!-- Menu Lateral -->
+                <div class="admin-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Menu</h3>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <button class="nav-item active" data-page="dashboard">
+                            📊 Dashboard
+                        </button>
+                        <button class="nav-item" data-page="cadastrar">
+                            ➕ Cadastrar Produto
+                        </button>
+                        <button class="nav-item" data-page="gerenciar">
+                            📋 Gerenciar Produtos
+                        </button>
+                    </nav>
+                    <div class="sidebar-footer">
+                        <button id="btn-logout" class="btn-logout">
+                            🚪 Sair
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Conteúdo Principal -->
+                <div class="admin-main">
+                    <!-- Página Dashboard -->
+                    <div id="page-dashboard" class="admin-page active">
+                        <div class="page-header">
+                            <h3>📊 Dashboard</h3>
+                            <p>Análise e estatísticas dos produtos</p>
+                        </div>
+                        
+                        <!-- Cards de Resumo -->
+                        <div class="resumo-cards">
+                            <div class="resumo-card">
+                                <h4>Total de Produtos</h4>
+                                <p class="resumo-numero" id="total-produtos-card">0</p>
+                            </div>
+                            <div class="resumo-card">
+                                <h4>Estoque Total</h4>
+                                <p class="resumo-numero" id="total-estoque">0</p>
+                            </div>
+                            <div class="resumo-card">
+                                <h4>Valor Total em Estoque</h4>
+                                <p class="resumo-numero" id="valor-total-estoque">0 kz</p>
+                            </div>
+                            <div class="resumo-card">
+                                <h4>Categorias</h4>
+                                <p class="resumo-numero" id="total-categorias">4</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Gráficos -->
+                        <div class="graficos-container">
+                            <div class="grafico-card">
+                                <h4>Produtos por Categoria</h4>
+                                <canvas id="grafico-categorias"></canvas>
+                            </div>
+                            <div class="grafico-card">
+                                <h4>Estoque Total por Categoria</h4>
+                                <canvas id="grafico-estoque"></canvas>
+                            </div>
+                            <div class="grafico-card">
+                                <h4>Valor Total em Estoque (kz)</h4>
+                                <canvas id="grafico-valor-estoque"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Página Cadastrar -->
+                    <div id="page-cadastrar" class="admin-page">
+                        <div class="page-header">
+                            <h3>➕ Cadastrar Novo Produto</h3>
+                            <p>Preencha os dados do novo produto</p>
+                        </div>
+                        
+                        <div class="form-container">
+                            <form id="formulario-admin">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="admin-nome">Nome do Produto</label>
+                                        <input type="text" id="admin-nome" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="admin-descricao">Descrição</label>
+                                        <textarea id="admin-descricao"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="admin-preco">Preço (kz)</label>
+                                        <input type="number" id="admin-preco" step="0.01" min="0" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="admin-estoque">Estoque Disponível</label>
+                                        <input type="number" id="admin-estoque" min="0" required>
+                                        <small>Quantidade disponível em estoque</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="admin-categoria">Categoria</label>
+                                        <select id="admin-categoria" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="eletronicos">Eletrônicos</option>
+                                            <option value="vestuario">Vestuário</option>
+                                            <option value="livros">Livros</option>
+                                            <option value="moveis">Móveis</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group full-width">
+                                        <label for="admin-imagem">Imagem do Produto</label>
+                                        <div class="imagem-upload">
+                                            <input type="file" id="admin-imagem" accept="image/*" required>
+                                            <small>Use imagens quadradas para melhor visualização</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-submit">Cadastrar Produto</button>
+                                    <button type="button" class="btn-limpar" id="btn-limpar">Limpar Formulário</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Página Gerenciar -->
+                    <div id="page-gerenciar" class="admin-page">
+                        <div class="page-header">
+                            <h3>📋 Gerenciar Produtos</h3>
+                            <p>Visualize, edite ou elimine produtos cadastrados</p>
+                        </div>
+                        
+                        <div class="filtros">
+                            <div class="search-box">
+                                <input type="text" id="search-input" placeholder="Buscar produto...">
+                                <button class="btn-search">🔍</button>
+                            </div>
+                            <select id="filter-categoria" class="filter-select">
+                                <option value="">Todas as categorias</option>
+                                <option value="eletronicos">Eletrônicos</option>
+                                <option value="vestuario">Vestuário</option>
+                                <option value="livros">Livros</option>
+                                <option value="moveis">Móveis</option>
+                            </select>
+                        </div>
+                        
+                        <div class="produtos-info">
+                            <p>Total de produtos: <span id="total-produtos">0</span></p>
+                            <p>Produtos filtrados: <span id="produtos-filtrados">0</span></p>
+                        </div>
+                        
+                        <div class="produtos-lista" id="lista-produtos">
+                            <!-- Produtos serão listados aqui -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="modal-edicao" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Editar Produto</h3>
+                <button class="btn-fechar">&times;</button>
+            </div>
+            <form id="form-editar">
+                <input type="hidden" id="editar-id">
+                
+                <div class="form-group">
+                    <label for="editar-nome">Nome do Produto</label>
+                    <input type="text" id="editar-nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editar-descricao">Descrição</label>
+                    <textarea id="editar-descricao"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar-preco">Preço (kz)</label>
+                    <input type="number" id="editar-preco" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar-estoque">Estoque Disponível</label>
+                    <input type="number" id="editar-estoque" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editar-categoria">Categoria</label>
+                    <select id="editar-categoria" required>
+                        <option value="">Selecione...</option>
+                        <option value="eletronicos">Eletrônicos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="livros">Livros</option>
+                        <option value="moveis">Móveis</option>
+                    </select>
+                </div>
+                
+                <div class="imagem-preview-container">
+                    <p style="margin-bottom: 10px; font-weight: 600; color: #2c3e50;">Imagem atual:</p>
+                    <img id="imagem-atual" class="imagem-preview" src="" alt="Imagem do produto">
+                    <button type="button" class="btn-trocar-imagem" id="btn-trocar-imagem">
+                        Trocar Imagem
+                    </button>
+                    <input type="file" id="nova-imagem" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                    <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../javascript/admin.js"></script>
+</body>
+</html>

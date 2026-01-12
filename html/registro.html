@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Loja Virtual</title>
+    <link rel="stylesheet" href="../css/estilo.css">
+    <link rel="stylesheet" href="../css/registro.css">
+</head>
+<body class="pagina-registro">
+    <div class="registro-container">
+        <div class="registro-header">
+            <h1>Criar Conta</h1>
+            <p>Cadastre-se para uma experiência personalizada</p>
+        </div>
+        
+        <div class="registro-form">
+            <div id="mensagem-sucesso" class="mensagem-sucesso"></div>
+            <div id="mensagem-erro" class="mensagem-erro"></div>
+            
+            <form id="formulario-registro">
+                <div class="form-group">
+                    <label for="nome">Nome Completo *</label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+                    <div class="error-message" id="erro-nome"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" name="email" placeholder="exemplo@email.com" required>
+                    <div class="error-message" id="erro-email"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha">Senha *</label>
+                    <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" required minlength="8">
+                    <button type="button" class="show-password" id="toggle-senha">👁️ Mostrar</button>
+                    <div class="password-strength">
+                        <div class="strength-meter" id="strength-meter"></div>
+                    </div>
+                    <div class="strength-text" id="strength-text"></div>
+                    <div class="error-message" id="erro-senha"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmar-senha">Confirmar Senha *</label>
+                    <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Digite a senha novamente" required>
+                    <button type="button" class="show-password" id="toggle-confirmar">👁️ Mostrar</button>
+                    <div class="error-message" id="erro-confirmar"></div>
+                </div>
+                
+                <button type="submit" class="btn-registro" id="btn-registro">
+                    Criar Conta
+                </button>
+            </form>
+            
+            <div class="login-link">
+                Já tem uma conta? <a href="login.html">Faça login aqui</a>
+            </div>
+            
+            <div class="termos-condicoes">
+                Ao criar uma conta, você concorda com nossos 
+                <a href="#" onclick="alert('Termos de serviço em construção'); return false;">Termos de Serviço</a> 
+                e 
+                <a href="#" onclick="alert('Política de privacidade em construção'); return false;">Política de Privacidade</a>.
+            </div>
+
+            <a href="../index.html" class="btn-voltar">← Voltar à Loja</a>
+        </div>
+        
+    </div>
+
+    <script src="../javascript/registro.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Loja Virtual</title>
+    <link rel="stylesheet" href="../css/estilo.css">
+    <link rel="stylesheet" href="../css/registro.css">
+</head>
+<body class="pagina-registro">
+    <div class="registro-container">
+        <div class="registro-header">
+            <h1>Login</h1>
+        </div>
+        
+        <div class="registro-form">
+            
+            <div id="mensagem-erro" class="mensagem-erro">Usuário ou senha incorretos!</div>
+            
+            <form id="formulario-login" method="post">
+                
+                <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" name="email" placeholder="exemplo@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha">Senha *</label>
+                    <input type="password" id="senha" name="senha" placeholder="Digite a sua senha" required>
+                    <button type="button" class="show-password" id="toggle-senha">👁️ Mostrar</button>
+                </div>
+                
+                
+                <button type="submit" class="btn-registro" id="btn-login">
+                    Login
+                </button>
+                
+            </form>
+            
+            <div class="login-link">
+                Não tem uma conta? <a href="registro.html">Faça o registro aqui</a>
+            </div>
+            
+            <a href="../index.html" class="btn-voltar">← Voltar à Loja</a>
+        </div>
+    </div>
+
+    <script src="../javascript/registro.js"></script>
+</body>
+</html>
