@@ -78,7 +78,7 @@
             });
             
             // Botão limpar formulário
-            document.getElementById('btn-limpar')?.addEventListener('click', function() {
+                document.getElementById('btn-limpar')?.addEventListener('click', function() {
                 document.getElementById('admin-nome').value = '';
                 document.getElementById('admin-preco').value = '';
                 document.getElementById('admin-estoque').value = '';
@@ -401,7 +401,7 @@
                     };
                     leitor.readAsDataURL(inputNovaImagem.files[0]);
                 } else {
-                    // Atualizar sem mudar a imagem
+                    dadosAtualizados.imagem = produtoEditando.imagem;
                     const response = await fetch(`${API_URL}/produtos/${produtoEditando.id}`, {
                         method: 'PUT',
                         headers: {

@@ -9,10 +9,7 @@
         
         let usuarioDados = null;
         
-        // ==================== FUNÇÕES UTILITÁRIAS ====================
-        function formatarPreco(preco) {
-            return `${preco.toFixed(2).replace('.', ',')} kz`;
-        }
+        
         
         // ==================== FUNÇÃO PARA CARREGAR DADOS DO USUÁRIO ====================
         async function carregarDadosUsuario() {
@@ -66,7 +63,7 @@
                 if (pedidos.length > 0) {
                     const ultimoPedido = pedidos[pedidos.length - 1];
                     const dataFormatada = new Date(ultimoPedido.data).toLocaleDateString('pt-PT');
-                    document.getElementById('perfil-ultimo-pedido').value = `Pedido #${ultimoPedido.id.substring(0, 8)} - ${dataFormatada}`;
+                    document.getElementById('perfil-ultimo-pedido').value = `${dataFormatada}`;
                 }
                 document.getElementById('badge-pedidos').textContent = pedidos.length
                 
@@ -215,23 +212,7 @@
             }
         }
         
-        // ==================== CARRINHO ESPECÍFICO PARA A PÁGINA ====================
-        /*function inicializarCarrinhoEspecifico() {
-            // Usar o carrinho da loja.js (já carregado)
-            atualizarContadorCarrinhoHeader();
-            
-            // Abrir/fechar carrinho
-            document.getElementById('carrinho-btn').addEventListener('click', () => {
-                document.getElementById('carrinho-sidebar').classList.add('ativo');
-                document.getElementById('overlay').style.display = 'block';
-            });
-            
-            document.querySelector('.fechar-carrinho').addEventListener('click', fecharCarrinho);
-            document.getElementById('overlay').addEventListener('click', fecharCarrinho);
-            
-            // Finalizar compra
-            document.getElementById('finalizar-compra').addEventListener('click', finalizarCompraEspecifico);
-        }*/
+       
         
         function atualizarContadorCarrinhoHeader() {
             // Usar o carrinho da loja.js
@@ -730,12 +711,12 @@
             });
             
             // Adicionar todos os itens ao carrinho
-            document.querySelectorAll('.btn-repetir').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const pedidoId = this.getAttribute('data-pedido-id');
-                    adicionarTodosItensAoCarrinho(pedidoId);
-                });
+            document.querySelectorAll('.btn-adicionar-todos').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const pedidoId = this.getAttribute('data-pedido-id');
+                adicionarItemAoCarrinho(pedidoId);
             });
+        });
         }
         
         async function mostrarDetalhesPedido(pedidoId) {
@@ -810,52 +791,43 @@
             }
         }
         
-        async function adicionarTodosItensAoCarrinho(pedidoId) {
+        async function adicionarItemAoCarrinho(pedidoId) {
             try {
-                const response = await fetch(`${API_URL}/pedidos/${pedidoId}`);
-                if (!response.ok) throw new Error('Pedido não encontrado');
-                
-                const pedido = await response.json();
-                const carrinhoAtual = JSON.parse(localStorage.getItem('carrinho')) || [];
-                let itensAdicionados = 0;
-                
-                // Adicionar todos os itens ao carrinho
-                for (const item of pedido.itens) {
-                    const produtoResponse = await fetch(`${API_URL}/produtos/${item.produtoId}`);
-                    if (produtoResponse.ok) {
-                        const produto = await produtoResponse.json();
-                        if (produto && produto.estoque > 0) {
-                            const quantidade = Math.min(item.quantidade, produto.estoque);
-                            
-                            const itemExistente = carrinhoAtual.find(i => i.id === item.produtoId);
-                            if (itemExistente) {
-                                itemExistente.quantidade += quantidade;
-                            } else {
-                                carrinhoAtual.push({
-                                    id: item.produtoId,
-                                    nome: item.nome,
-                                    preco: item.preco,
-                                    quantidade: quantidade
-                                });
-                            }
-                            itensAdicionados++;
-                        }
+                    // Buscar o pedido
+                    const response = await fetch(`${API_URL}/pedidos/${pedidoId}`);
+                    if (!response.ok) throw new Error('Pedido não encontrado');
+                    
+                    const pedido = await response.json();
+                    
+                    if (!pedido.itens || pedido.itens.length === 0) {
+                        alert('Este pedido não contém itens.');
+                        return;
                     }
+                    
+                    let totalAdicionado = 0;
+                    
+                    // Para cada item no pedido
+                    for (const item of pedido.itens) {
+                        const produtoId = item.produtoId || item.id;
+                        
+                        if (!produtoId) continue;
+                        
+                        
+                        adicionarAoCarrinho(produtoId, item.quantidade);
+                        totalAdicionado += item.quantidade;
+                    }
+                    
+                    // Feedback final
+                    if (totalAdicionado > 0) {
+                        alert(`✅ Pedido adicionado ao carrinho!`);
+                    } else {
+                        alert('Nenhum item pôde ser adicionado (estoque insuficiente ou produtos indisponíveis).');
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro ao processar pedido:', error);
+                    alert('Erro ao adicionar itens ao carrinho.');
                 }
-                
-                localStorage.setItem('carrinho', JSON.stringify(carrinhoAtual));
-                atualizarContadorCarrinhoHeader();
-                
-                if (itensAdicionados > 0) {
-                    alert(`✅ ${itensAdicionados} item(ns) do pedido adicionados ao carrinho!`);
-                } else {
-                    alert('Nenhum item disponível em estoque para adicionar ao carrinho.');
-                }
-                
-            } catch (error) {
-                console.error('Erro ao adicionar itens ao carrinho:', error);
-                alert('Erro ao adicionar itens ao carrinho.');
-            }
         }
         
         // ==================== MOSTRAR RESUMO COMPRA ====================

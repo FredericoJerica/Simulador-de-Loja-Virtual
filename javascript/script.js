@@ -138,7 +138,7 @@ function gerarBotoesCategorias() {
 }
 
 // ==================== FUNÇÕES DO CARRINHO ====================
-function adicionarAoCarrinho(idProduto) {
+function adicionarAoCarrinho(idProduto, quantidade = 1) {
     const produto = produtos.find(p => p.id === idProduto);
     if (!produto) return;
     
@@ -152,17 +152,23 @@ function adicionarAoCarrinho(idProduto) {
     const itemExistente = carrinho.find(item => item.id === idProduto);
     
     if (itemExistente) {
-        if (itemExistente.quantidade >= produto.estoque) {
+        if (itemExistente.quantidade + quantidade > produto.estoque) {
             alert(`Limite de estoque atingido! Só temos ${produto.estoque} unidades.`);
             return;
         }
-        itemExistente.quantidade++;
+        itemExistente.quantidade += quantidade;
     } else {
+
+        if (quantidade > produto.estoque) {
+            alert(`Quantidade solicitada (${quantidade}) excede estoque disponível (${produto.estoque})!`);
+            return;
+        }
+
         carrinho.push({
             id: produto.id,
             nome: produto.nome,
             preco: produto.preco,
-            quantidade: 1
+            quantidade: quantidade
         });
     }
     
