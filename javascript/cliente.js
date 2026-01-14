@@ -9,6 +9,13 @@
         
         let usuarioDados = null;
         
+        setTimeout(() => {
+            if (usuarioLogado) {
+                localStorage.removeItem('usuario_logado');
+                alert('Sessão expirada. Por favor, faça login novamente.');
+                window.location.reload();
+            }
+        }, 30 * 60 * 1000);
         
         
         // ==================== FUNÇÃO PARA CARREGAR DADOS DO USUÁRIO ====================

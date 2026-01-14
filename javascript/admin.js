@@ -34,7 +34,7 @@
         // Logout automático após 30 minutos
         setTimeout(() => {
             if (usuarioLogado) {
-                localStorage.removeItem('admin_logado');
+                localStorage.removeItem('usuario_logado');
                 alert('Sessão expirada. Por favor, faça login novamente.');
                 window.location.reload();
             }
