@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Conta - FreOde</title>
-
     <link rel="stylesheet" href="../css/estiloCliente.css">
-    
-    
 </head>
 <body>
-
-    <!-- Cabeçalho similar ao Admin -->
     <header>
         <div class="container header-content">
-
-              <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu">
                 ☰
             </button>
             <div class="logo">
@@ -23,8 +17,6 @@
                 <span>Minha Conta - FreOde</span>
             </div>
             <div class="header-actions">
-                
-                <!-- Carrinho no cabeçalho -->
                 <div class="carrinho-wrapper">
                     <button id="carrinho-btn" class="btn-carrinho">
                         🛒 Carrinho <span id="contador-carrinho">0</span>
@@ -34,56 +26,52 @@
         </div>
     </header>
 
-    <!-- CARRINHO SIDEBAR (OCULTO POR PADRÃO) -->
     <aside id="carrinho-sidebar">
         <div class="carrinho-header">
             <h3 class="carrinho-titulo">Seu Carrinho</h3>
             <button class="fechar-carrinho">×</button>
         </div>
         <div id="carrinho-itens">
-            <!-- Itens do carrinho serão renderizados aqui -->
             <div class="carrinho-vazio">Seu carrinho está vazio</div>
         </div>
-        <div id="carrinho-total" style="display: none;">
+        <div id="carrinho-total">
             <hr>
-            <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; margin-top: 1rem;">
+            <div>
                 <span>Total:</span>
                 <span id="total-valor">R$ 0,00</span>
             </div>
-            <button id="finalizar-compra" style="width: 100%; padding: 1rem; background: #27ae60; color: white; border: none; border-radius: 8px; margin-top: 1.5rem; font-weight: 600; cursor: pointer;">
+            <button id="finalizar-compra">
                 Finalizar Compra
             </button>
         </div>
     </aside>
 
-    <!-- OVERLAY PARA CARRINHO -->
-    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+    <div id="overlay"></div>
 
-    <!-- Modal para descrição do produto -->
-        <div id="modal-descricao" class="modal-descricao">
-            <div class="modal-descricao-content">
-                <span class="fechar-modal-descricao">&times;</span>
-                <div class="modal-descricao-header">
-                    <h3 id="modal-descricao-titulo"></h3>
-                    <p id="modal-descricao-preco" class="modal-preco"></p>
+    <div id="modal-descricao" class="modal-descricao">
+        <div class="modal-descricao-content">
+            <span class="fechar-modal-descricao">&times;</span>
+            <div class="modal-descricao-header">
+                <h3 id="modal-descricao-titulo"></h3>
+                <p id="modal-descricao-preco" class="modal-preco"></p>
+            </div>
+            <div class="modal-descricao-body">
+                <div class="modal-imagem-container">
+                    <img id="modal-descricao-imagem" src="" alt="" class="modal-imagem">
                 </div>
-                <div class="modal-descricao-body">
-                    <div class="modal-imagem-container">
-                        <img id="modal-descricao-imagem" src="" alt="" class="modal-imagem">
+                <div class="modal-info-container">
+                    <div class="modal-estoque-container">
+                        <span id="modal-descricao-estoque" class="modal-estoque"></span>
                     </div>
-                    <div class="modal-info-container">
-                        <div class="modal-estoque-container">
-                            <span id="modal-descricao-estoque" class="modal-estoque"></span>
-                        </div>
-                        <h4>Descrição:</h4>
-                        <p id="modal-descricao-texto" class="modal-texto"></p>
-                        <button id="modal-btn-adicionar" class="modal-btn-adicionar">
-                            Adicionar ao Carrinho
-                        </button>
-                    </div>
+                    <h4>Descrição:</h4>
+                    <p id="modal-descricao-texto" class="modal-texto"></p>
+                    <button id="modal-btn-adicionar" class="modal-btn-adicionar">
+                        Adicionar ao Carrinho
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
     <div id="conta-area">
         <div class="admin-container">
@@ -95,7 +83,6 @@
             </div>
             
             <div class="admin-layout">
-                <!-- Menu Lateral -->
                 <div class="admin-sidebar">
                     <div class="sidebar-header">
                         <div class="usuario-info">
@@ -111,7 +98,6 @@
                     </div>
                     
                     <nav class="sidebar-nav">
-                        
                         <button class="nav-item active" data-page="produtos">
                             <span class="nav-icon">🛍️</span>
                             <span class="nav-text">Produtos</span>
@@ -122,8 +108,6 @@
                             <span class="nav-text">Meus Pedidos</span>
                             <span class="nav-badge" id="badge-pedidos">0</span>
                         </button>
-                        
-                        
                         
                         <button class="nav-item" data-page="favoritos">
                             <span class="nav-icon">❤️</span>
@@ -145,103 +129,79 @@
                     </div>
                 </div>
                 
-                <!-- Conteúdo Principal -->
-
-                 <!-- Página Produtos -->
-                    <div id="page-produtos" class="admin-page active">
-                        <div class="page-header">
-                            <h2 id="titulo-catalogo"> Nossos Produtos</h2>
-                            <p>Explore nossa seleção de produtos</p>
-                        </div>
-                        
-                        <!-- Filtros de Categoria -->
-                        <div class="categorias-section">
-                            <div class="categorias">
-                                <button data-categoria="todos" class="ativa">Todos os Produtos</button>
-                                <!-- Categorias serão carregadas dinamicamente -->
-                            </div>
-                        </div>
-                        
-                        <!-- Barra de Pesquisa -->
-                        <div class="barra-pesquisa">
-                            <input type="text" id="campo-pesquisa" placeholder="Buscar produtos...">
-                            <button id="botao-pesquisa">🔍</button>
-                        </div>
-                        
-                        <!-- Grid de Produtos -->
-                        <div class="produtos-grid" id="catalogo-produtos">
-                            <!-- Produtos serão carregados aqui -->
-                            <div class="loading-container">
-                                <div class="loading">Carregando produtos...</div>
-                            </div>
+                <div id="page-produtos" class="admin-page active">
+                    <div class="page-header">
+                        <h2 id="titulo-catalogo"> Nossos Produtos</h2>
+                        <p>Explore nossa seleção de produtos</p>
+                    </div>
+                    
+                    <div class="categorias-section">
+                        <div class="categorias">
+                            <button data-categoria="todos" class="ativa">Todos os Produtos</button>
                         </div>
                     </div>
+                    
+                    <div class="barra-pesquisa">
+                        <input type="text" id="campo-pesquisa" placeholder="Buscar produtos...">
+                        <button id="botao-pesquisa">🔍</button>
+                    </div>
+                    
+                    <div class="produtos-grid" id="catalogo-produtos">
+                        <div class="loading-container">
+                            <div class="loading">Carregando produtos...</div>
+                        </div>
+                    </div>
+                </div>
                 
+                <div id="page-pedidos" class="admin-page">
+                    <div class="page-header">
+                        <h3>📋 Meus Pedidos</h3>
+                        <p>Histórico de todas as suas compras</p>
+                    </div>
                     
-                    <!-- Página Pedidos (SIMPLIFICADA) -->
-                    <div id="page-pedidos" class="admin-page">
-                        <div class="page-header">
-                            <h3>📋 Meus Pedidos</h3>
-                            <p>Histórico de todas as suas compras</p>
-                        </div>
-                        
-                        <div class="pedidos-container" id="lista-pedidos">
-                            <!-- Pedidos serão carregados aqui -->
-                            <div class="loading-container">
-                                <div class="loading">Carregando seus pedidos...</div>
-                            </div>
-                        </div>
-                        
-                        <div class="sem-pedidos" id="sem-pedidos" style="display: none;">
-                            <div class="empty-state">
-                                <div class="empty-icon">📦</div>
-                                <h4>Nenhum pedido encontrado</h4>
-                                <p>Você ainda não fez nenhuma compra em nossa loja.</p>
-                                <button class="btn-comprar" id="btn-explorar-produtos">
-                                    🛍️ Explorar Produtos
-                                </button>
-                            </div>
+                    <div class="pedidos-container" id="lista-pedidos">
+                        <div class="loading-container">
+                            <div class="loading">Carregando seus pedidos...</div>
                         </div>
                     </div>
                     
-                   
-                    
-                    <!-- Página Favoritos -->
-                    <div id="page-favoritos" class="admin-page">
-                        <div class="page-header">
-                            <h3>❤️ Meus Favoritos</h3>
-                            <p>Produtos que você salvou para depois</p>
-                        </div>
-                        
-                        <!--<div class="favoritos-info">
-                            <p>Você tem <span id="total-favoritos">0</span> produto(s) favoritado(s)</p>
-                            <button id="btn-limpar-favoritos" class="btn-limpar">
-                                🗑️ Limpar Todos os Favoritos
+                    <div class="sem-pedidos" id="sem-pedidos">
+                        <div class="empty-state">
+                            <div class="empty-icon">📦</div>
+                            <h4>Nenhum pedido encontrado</h4>
+                            <p>Você ainda não fez nenhuma compra em nossa loja.</p>
+                            <button class="btn-comprar" id="btn-explorar-produtos">
+                                🛍️ Explorar Produtos
                             </button>
-                        </div>-->
-                        
-                        <div class="produtos-grid favoritos-grid" id="lista-favoritos">
-                            <!-- Produtos favoritos serão carregados aqui -->
-                            <div class="loading-container">
-                                <div class="loading">Carregando seus favoritos...</div>
-                            </div>
-                        </div>
-                        
-                        <div class="sem-favoritos" id="sem-favoritos" style="display: none;">
-                            <div class="empty-state">
-                                <div class="empty-icon">❤️</div>
-                                <h4>Nenhum produto favoritado</h4>
-                                <p>Adicione produtos aos favoritos para encontrá-los facilmente depois.</p>
-                                <button class="btn-comprar" id="btn-explorar-produtos-favoritos">
-                                    🛍️ Explorar Produtos
-                                </button>
-                            </div>
                         </div>
                     </div>
+                </div>
+                
+                <div id="page-favoritos" class="admin-page">
+                    <div class="page-header">
+                        <h3>❤️ Meus Favoritos</h3>
+                        <p>Produtos que você salvou para depois</p>
+                    </div>
+                    
+                    <div class="produtos-grid favoritos-grid" id="lista-favoritos">
+                        <div class="loading-container">
+                            <div class="loading">Carregando seus favoritos...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="sem-favoritos" id="sem-favoritos">
+                        <div class="empty-state">
+                            <div class="empty-icon">❤️</div>
+                            <h4>Nenhum produto favoritado</h4>
+                            <p>Adicione produtos aos favoritos para encontrá-los facilmente depois.</p>
+                            <button class="btn-comprar" id="btn-explorar-produtos-favoritos">
+                                🛍️ Explorar Produtos
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-
-                    <div class="admin-main">
-                    <!-- Página Perfil -->
+                <div class="admin-main">
                     <div id="page-perfil" class="admin-page">
                         <div class="page-header">
                             <h3>👤 Meu Perfil</h3>
@@ -266,7 +226,6 @@
                                         <label for="perfil-data-cadastro">Data de Cadastro</label>
                                         <input type="text" id="perfil-data-cadastro" readonly class="readonly-field">
                                     </div>
-                                    
                                     
                                     <div class="form-group">
                                         <label for="perfil-ultimo-pedido">Último Pedido</label>
@@ -313,13 +272,11 @@
                             </form>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Detalhes do Pedido -->
     <div id="modal-detalhes-pedido" class="modal-overlay">
         <div class="modal-container modal-grande">
             <div class="modal-header">
@@ -327,7 +284,6 @@
                 <button class="btn-fechar-modal">&times;</button>
             </div>
             <div class="modal-body" id="modal-detalhes-conteudo">
-                <!-- Conteúdo será preenchido via JavaScript -->
             </div>
             <div class="modal-footer">
                 <button class="btn-fechar-modal">Fechar</button>
@@ -335,7 +291,6 @@
         </div>
     </div>
 
-    <!-- Modal Resumo da Compra -->
     <div id="modal-resumo-compra" class="modal-overlay">
         <div class="modal-container modal-medio">
             <div class="modal-header">
@@ -343,7 +298,6 @@
                 <button class="btn-fechar-modal">&times;</button>
             </div>
             <div class="modal-body" id="modal-resumo-conteudo">
-                <!-- Resumo da compra será preenchido aqui -->
             </div>
             <div class="modal-footer">
                 <button class="btn-fechar-modal" id="btn-fechar-resumo">Continuar Comprando</button>
@@ -351,10 +305,7 @@
         </div>
     </div>
 
-    <!-- JavaScript da Página Principal (reaproveitado) -->
     <script src="../javascript/script.js" defer></script>
-    
-    <!-- JavaScript específico para a conta do usuário -->
     <script src="../javascript/cliente.js"></script>
 </body>
 </html>

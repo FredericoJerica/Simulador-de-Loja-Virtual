@@ -326,6 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
         gerarBotoesCategorias();
         renderizarProdutos();
         atualizarCarrinho();
+        configurarBuscaConta();
     });
     
     // Delegar eventos para elementos dinâmicos
@@ -513,4 +514,23 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-window.adicionarAoCarrinho = adicionarAoCarrinho;
+function configurarBuscaConta() {
+        const campoBusca = document.getElementById('campo-pesquisa');
+        const botaoBusca = document.getElementById('botao-pesquisa');
+            
+        const executarBusca = () => {
+                const termo = campoBusca.value.toLowerCase();
+                const produtosFiltrados = produtos.filter(produto => 
+                    produto.nome.toLowerCase().includes(termo) ||
+                    produto.descricao?.toLowerCase().includes(termo)
+                );
+                renderizarProdutos('todos',produtosFiltrados);
+                 setTimeout(() => {
+                    //adicionarFavoritosAosProdutos();
+                }, 100);
+            };
+            
+            campoBusca.addEventListener('input', executarBusca);
+            botaoBusca.addEventListener('click', executarBusca);
+            
+        }

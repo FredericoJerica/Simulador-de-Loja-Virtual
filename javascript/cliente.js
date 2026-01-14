@@ -316,10 +316,10 @@
                 produtos = await response.json();
                 
                 //renderizarProdutosConta(produtos);
-                
+                configurarBuscaConta();
                 adicionarFavoritosAosProdutos();
                 
-                configurarBuscaConta();
+                
                 
             } catch (error) {
                 console.error('Erro:', error);
@@ -433,7 +433,7 @@
         
         
         
-        function configurarBuscaConta() {
+        /*function configurarBuscaConta() {
             const campoBusca = document.getElementById('campo-pesquisa');
             const botaoBusca = document.getElementById('botao-pesquisa');
             
@@ -452,7 +452,7 @@
             campoBusca.addEventListener('input', executarBusca);
             botaoBusca.addEventListener('click', executarBusca);
             
-        }
+        }*/
         
         /*function filtrarProdutosConta(categoria) {
             const termo = document.getElementById('campo-pesquisa')?.value.toLowerCase() || '';

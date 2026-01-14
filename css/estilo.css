@@ -731,3 +731,58 @@ header a{
                 gap: 8px;
                 box-shadow: 0 4px 12px rgba(74, 100, 145, 0.2);
 }
+
+#carrinho-total div{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+#finalizar-compra{
+    width: 100%;
+    padding: 1rem;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+/* Estilos que foram removidos do HTML inline */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pesquisa-form {
+    text-align: center;
+}
+
+#carrinho-total {
+    display: none;
+}
+
+.carrinho-total-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}

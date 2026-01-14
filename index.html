@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
-
-	
     <header>
         <div class="container header-content">
             <div class="logo">
@@ -16,168 +14,141 @@
                 <span>FreOde</span>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 15px;">
-
+            <div class="header-actions">
                 <div class="carrinho-wrapper">
                     <button id="carrinho-btn">
                         <span>Carrinho</span>
                         <span id="contador-carrinho">0</span>
                     </button>
                 </div>
-
-                <a href="html/login.html">
-                👤 <span>Entrar</span>
-            </a>
-                
-
-
-            
-
+                <a href="html/login.html" class="login-link">
+                    👤 <span>Entrar</span>
+                </a>
             </div>
-
         </div>
     </header>
 
-    <!-- MENU DE CATEGORIAS -->
     <section class="categorias-section">
-        
         <div class="container">
-            <form action="" style="text-align: center;">
-            <div class="barra-pesquisa">
-                <input 
-                    type="search" 
-                    id="campo-pesquisa" 
-                    placeholder="Pesquisar produtos..." 
-                    aria-label="Campo de pesquisa de produtos"
-                >
-                <button id="botao-pesquisa" aria-label="Pesquisar">
-                    🔍
-                </button>
-            </div>
-            
-        </form>
+            <form action="" class="pesquisa-form">
+                <div class="barra-pesquisa">
+                    <input 
+                        type="search" 
+                        id="campo-pesquisa" 
+                        placeholder="Pesquisar produtos..." 
+                        aria-label="Campo de pesquisa de produtos"
+                    >
+                    <button id="botao-pesquisa" aria-label="Pesquisar">
+                        🔍
+                    </button>
+                </div>
+            </form>
             <div class="categorias">
                 <button data-categoria="todos" class="ativa">Todos os Produtos</button>
-                <!-- Os botões serão gerados dinamicamente via JavaScript -->
             </div>
         </div>
     </section>
 
-    <!-- CATÁLOGO DE PRODUTOS -->
     <main class="container catalogo-section">
         <h2 id="titulo-catalogo">Nossos Produtos</h2>
-        <div class="produtos-grid" id="catalogo-produtos">
-            
-        </div>
+        <div class="produtos-grid" id="catalogo-produtos"></div>
     </main>
 
-    <!-- CARRINHO SIDEBAR (OCULTO POR PADRÃO) -->
     <aside id="carrinho-sidebar">
         <div class="carrinho-header">
             <h3 class="carrinho-titulo">Seu Carrinho</h3>
             <button class="fechar-carrinho">×</button>
         </div>
         <div id="carrinho-itens">
-            <!-- Itens do carrinho serão renderizados aqui -->
             <div class="carrinho-vazio">Seu carrinho está vazio</div>
         </div>
-        <div id="carrinho-total" style="display: none;">
+        <div id="carrinho-total">
             <hr>
-            <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; margin-top: 1rem;">
+            <div class="carrinho-total-info">
                 <span>Total:</span>
                 <span id="total-valor">R$ 0,00</span>
             </div>
-            <button id="finalizar-compra" style="width: 100%; padding: 1rem; background: #27ae60; color: white; border: none; border-radius: 8px; margin-top: 1.5rem; font-weight: 600; cursor: pointer;">
-                Finalizar Compra
-            </button>
+            <button id="finalizar-compra">Finalizar Compra</button>
         </div>
     </aside>
 
-    
+    <div id="overlay"></div>
 
-    <!-- OVERLAY PARA CARRINHO -->
-    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
-    
-
-        <!-- FOOTER -->
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-section">
-                        <h3>FreOde</h3>
-                        <p>Sua loja virtual de confiança com os melhores produtos eletrônicos, vestuário, livros e móveis.</p>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h4>Categorias</h4>
-                        <ul>
-                            <li><a href="#" data-categoria="eletronicos">Eletrônicos</a></li>
-                            <li><a href="#" data-categoria="vestuario">Vestuário</a></li>
-                            <li><a href="#" data-categoria="livros">Livros</a></li>
-                            <li><a href="#" data-categoria="moveis">Móveis</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h4>Links Rápidos</h4>
-                        <ul>
-                            <li><a href="#">Sobre Nós</a></li>
-                            <li><a href="#">Contato</a></li>
-                            <li><a href="#">Política de Privacidade</a></li>
-                            <li><a href="#">Termos de Serviço</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h4>Contato</h4>
-                        <ul>
-                            <li>📧 contato@freode.com</li>
-                            <li>📞 +244 923 444 555</li>
-                            <li>📍 Luanda, Angola</li>
-                        </ul>
-                    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FreOde</h3>
+                    <p>Sua loja virtual de confiança com os melhores produtos eletrônicos, vestuário, livros e móveis.</p>
                 </div>
                 
-                <div class="footer-bottom">
-                    <p>&copy; 2026 FreOde - Todos os direitos reservados.</p>
-                    <div class="footer-social">
-                        <a href="#">📘</a>
-                        <a href="#">🐦</a>
-                        <a href="#">📷</a>
-                        <a href="#">🎬</a>
-                    </div>
+                <div class="footer-section">
+                    <h4>Categorias</h4>
+                    <ul>
+                        <li><a href="#" data-categoria="eletronicos">Eletrônicos</a></li>
+                        <li><a href="#" data-categoria="vestuario">Vestuário</a></li>
+                        <li><a href="#" data-categoria="livros">Livros</a></li>
+                        <li><a href="#" data-categoria="moveis">Móveis</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Serviço</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li>📧 contato@freode.com</li>
+                        <li>📞 +244 923 444 555</li>
+                        <li>📍 Luanda, Angola</li>
+                    </ul>
                 </div>
             </div>
-        </footer>
-
-
-        <!-- Modal para descrição do produto -->
-        <div id="modal-descricao" class="modal-descricao">
-            <div class="modal-descricao-content">
-                <span class="fechar-modal-descricao">&times;</span>
-                <div class="modal-descricao-header">
-                    <h3 id="modal-descricao-titulo"></h3>
-                    <p id="modal-descricao-preco" class="modal-preco"></p>
-                </div>
-                <div class="modal-descricao-body">
-                    <div class="modal-imagem-container">
-                        <img id="modal-descricao-imagem" src="" alt="" class="modal-imagem">
-                    </div>
-                    <div class="modal-info-container">
-                        <div class="modal-estoque-container">
-                            <span id="modal-descricao-estoque" class="modal-estoque"></span>
-                        </div>
-                        <h4>Descrição:</h4>
-                        <p id="modal-descricao-texto" class="modal-texto"></p>
-                        <button id="modal-btn-adicionar" class="modal-btn-adicionar">
-                            Adicionar ao Carrinho
-                        </button>
-                    </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 FreOde - Todos os direitos reservados.</p>
+                <div class="footer-social">
+                    <a href="#">📘</a>
+                    <a href="#">🐦</a>
+                    <a href="#">📷</a>
+                    <a href="#">🎬</a>
                 </div>
             </div>
         </div>
+    </footer>
 
+    <div id="modal-descricao" class="modal-descricao">
+        <div class="modal-descricao-content">
+            <span class="fechar-modal-descricao">&times;</span>
+            <div class="modal-descricao-header">
+                <h3 id="modal-descricao-titulo"></h3>
+                <p id="modal-descricao-preco" class="modal-preco"></p>
+            </div>
+            <div class="modal-descricao-body">
+                <div class="modal-imagem-container">
+                    <img id="modal-descricao-imagem" src="" alt="" class="modal-imagem">
+                </div>
+                <div class="modal-info-container">
+                    <div class="modal-estoque-container">
+                        <span id="modal-descricao-estoque" class="modal-estoque"></span>
+                    </div>
+                    <h4>Descrição:</h4>
+                    <p id="modal-descricao-texto" class="modal-texto"></p>
+                    <button id="modal-btn-adicionar" class="modal-btn-adicionar">
+                        Adicionar ao Carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-   <script src="javascript/script.js"></script>
+    <script src="javascript/script.js"></script>
 </body>
 </html>
