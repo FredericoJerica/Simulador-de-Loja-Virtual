@@ -219,18 +219,6 @@
         
        
         
-        /*function atualizarContadorCarrinhoHeader() {
-            // Usar o carrinho da loja.js
-            const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-            const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
-            document.getElementById('contador-carrinho-header').textContent = totalItens;
-        }
-        
-        function fecharCarrinho() {
-            document.getElementById('carrinho-sidebar').classList.remove('ativo');
-            document.getElementById('overlay').style.display = 'none';
-        }*/
-        
         async function finalizarCompraEspecifico() {
             const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
             
@@ -327,60 +315,7 @@
             }
         }
         
-        /*function renderizarProdutosConta(listaProdutos) {
-            const container = document.getElementById('catalogo-produtos');
-            
-            if (listaProdutos.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🛒</div>
-                        <h4>Nenhum produto encontrado</h4>
-                        <p>Tente alterar os filtros de busca.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = '';
-            
-            listaProdutos.forEach(produto => {
-                const card = document.createElement('div');
-                card.className = 'produto-card';
-                
-                // Verificar se está nos favoritos
-                const estaFavoritado = verificarSeFavoritado(produto.id);
-                console.log(estaFavoritado)
-                
-                card.innerHTML = `
-                    <img src="${produto.imagem}" alt="${produto.nome}" class="produto-imagem">
-                    <div class="produto-info">
-                        <h3 class="produto-nome">${produto.nome}</h3>
-                        <p class="produto-preco">${formatarPreco(produto.preco)}</p>
-                        <p class="produto-estoque" style="color: ${produto.estoque > 0 ? '#27ae60' : '#e74c3c'};">
-                            ${produto.estoque > 0 ? `📦 Estoque: ${produto.estoque}` : '❌ Esgotado'}
-                        </p>
-                        ${produto.descricao ? `
-                            <a href="#" class="ver-descricao" data-id="${produto.id}">
-                                📄 Ver descrição completa
-                            </a>
-                        ` : ''}
-                        <div class="produto-acoes">
-                            <button class="btn-adicionar" data-id="${produto.id}" 
-                                ${produto.estoque <= 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
-                                ${produto.estoque > 0 ? '🛒 Adicionar' : 'Esgotado'}
-                            </button>
-                            <button class="btn-favorito ${estaFavoritado ? 'favoritado' : ''}" data-id="${produto.id}">
-                                ${estaFavoritado ? '❤️' : '🤍'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-            
-            // Adicionar eventos aos botões
-            adicionarEventosProdutosConta();
-        }*/
+      
 
         function adicionarFavoritosAosProdutos() {
             const produtosCards = document.querySelectorAll('.produto-card');
@@ -432,47 +367,6 @@
         }
         
         
-        
-        /*function configurarBuscaConta() {
-            const campoBusca = document.getElementById('campo-pesquisa');
-            const botaoBusca = document.getElementById('botao-pesquisa');
-            
-            const executarBusca = () => {
-                const termo = campoBusca.value.toLowerCase();
-                const produtosFiltrados = produtos.filter(produto => 
-                    produto.nome.toLowerCase().includes(termo) ||
-                    produto.descricao?.toLowerCase().includes(termo)
-                );
-                renderizarProdutos('todos',produtosFiltrados);
-                 setTimeout(() => {
-                    adicionarFavoritosAosProdutos();
-                }, 100);
-            };
-            
-            campoBusca.addEventListener('input', executarBusca);
-            botaoBusca.addEventListener('click', executarBusca);
-            
-        }*/
-        
-        /*function filtrarProdutosConta(categoria) {
-            const termo = document.getElementById('campo-pesquisa')?.value.toLowerCase() || '';
-            let produtosFiltrados = produtos;
-            
-            // Filtrar por categoria
-            if (categoria !== 'todos') {
-                produtosFiltrados = produtosFiltrados.filter(p => p.categoria === categoria);
-            }
-            
-            // Filtrar por busca
-            if (termo) {
-                produtosFiltrados = produtosFiltrados.filter(p => 
-                    p.nome.toLowerCase().includes(termo) ||
-                    p.descricao?.toLowerCase().includes(termo)
-                );
-            }
-            
-            renderizarProdutosConta(produtosFiltrados);
-        }*/
         
         function adicionarEventosProdutosConta() {
             
