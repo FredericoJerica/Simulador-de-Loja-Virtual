@@ -40,7 +40,7 @@ async function carregarProdutosDoServidor() {
     }
 }
 
-async function renderizarProdutos(categoria = 'todos') {
+async function renderizarProdutos(categoria = 'todos', produtosParaExibir = null) {
     const container = document.getElementById('catalogo-produtos');
     const titulo = document.getElementById('titulo-catalogo');
     
@@ -57,10 +57,15 @@ async function renderizarProdutos(categoria = 'todos') {
         ? 'Nossos Produtos' 
         : `${formatarNomeCategoria(categoria)}`;
     
-    // Filtra produtos
-    let produtosParaExibir = categoria === 'todos' 
-        ? produtos 
-        : produtos.filter(p => p.categoria === categoria);
+        if (produtosParaExibir == null) {
+            // Filtra produtos
+            produtosParaExibir = categoria === 'todos' 
+                ? produtos 
+                : produtos.filter(p => p.categoria === categoria);
+        } else{
+            titulo.textContent = `Resultados (${produtosParaExibir.length})`;
+        }
+    
     
     // Se não houver produtos
     if (produtosParaExibir.length === 0) {

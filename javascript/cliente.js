@@ -81,8 +81,7 @@
         // ==================== INICIALIZAR SISTEMA ====================
         function inicializarSistema() {
             inicializarNavegacao();
-            //inicializarCarrinhoEspecifico();
-            carregarDadosPagina('perfil');
+            carregarDadosPagina('produtos');
         }
         
         // ==================== NAVEGAÇÃO ====================
@@ -174,7 +173,6 @@
                 
                 // Se tiver nova senha, adicionar ao objeto
                 if (novaSenha) {
-                    // Em um sistema real, aqui você verificaria a senha atual e hashearia a nova
                     dadosAtualizados.senha = novaSenha;
                 }
                 
@@ -214,7 +212,7 @@
         
        
         
-        function atualizarContadorCarrinhoHeader() {
+        /*function atualizarContadorCarrinhoHeader() {
             // Usar o carrinho da loja.js
             const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
             const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
@@ -224,7 +222,7 @@
         function fecharCarrinho() {
             document.getElementById('carrinho-sidebar').classList.remove('ativo');
             document.getElementById('overlay').style.display = 'none';
-        }
+        }*/
         
         async function finalizarCompraEspecifico() {
             const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -268,8 +266,7 @@
                 // Limpar carrinho
                 localStorage.removeItem('carrinho');
                 
-                // Atualizar contador do carrinho
-                atualizarContadorCarrinhoHeader();
+               
                 
                 // Atualizar contadores do usuário
                 await carregarContadores(usuarioLogado.id);
@@ -311,8 +308,10 @@
                 if (!response.ok) throw new Error('Erro ao carregar produtos');
                 produtos = await response.json();
                 
-                renderizarProdutosConta(produtos);
-                renderizarCategoriasConta();
+                //renderizarProdutosConta(produtos);
+                
+                adicionarFavoritosAosProdutos();
+                
                 configurarBuscaConta();
                 
             } catch (error) {
@@ -321,7 +320,7 @@
             }
         }
         
-        function renderizarProdutosConta(listaProdutos) {
+        /*function renderizarProdutosConta(listaProdutos) {
             const container = document.getElementById('catalogo-produtos');
             
             if (listaProdutos.length === 0) {
@@ -374,32 +373,58 @@
             
             // Adicionar eventos aos botões
             adicionarEventosProdutosConta();
+        }*/
+
+        function adicionarFavoritosAosProdutos() {
+            const produtosCards = document.querySelectorAll('.produto-card');
+
+            console.log("Chegou")
+            
+            produtosCards.forEach(card => {
+                // Encontra o botão "Adicionar" existente
+                const btnAdicionar = card.querySelector('.btn-adicionar');
+                if (!btnAdicionar) return;
+                
+                // Pega o ID do produto
+                const produtoId = btnAdicionar.getAttribute('data-id');
+                
+                // Encontra o container do botão atual
+                const containerBotoes = btnAdicionar.parentNode;
+                
+                // Verifica se já tem botão de favorito (para não duplicar)
+                if (card.querySelector('.btn-favorito')) {
+                    return; // Já tem favorito, não faz nada
+                }
+                
+                // Verifica se está favoritado
+                const estaFavoritado = verificarSeFavoritado(parseInt(produtoId));
+                
+                // Substitui o botão único por div com dois botões
+                const divAcoes = document.createElement('div');
+                divAcoes.className = 'produto-acoes';
+                divAcoes.innerHTML = `
+                    ${btnAdicionar.outerHTML}
+                    <button class="btn-favorito ${estaFavoritado ? 'favoritado' : ''}" data-id="${produtoId}">
+                        ${estaFavoritado ? '❤️' : '🤍'}
+                    </button>
+                `;
+                
+                // Substitui o botão antigo pela nova div
+                containerBotoes.replaceChild(divAcoes, btnAdicionar);
+                
+                // Atualiza o texto do botão "Adicionar" (opcional)
+                const novoBtnAdicionar = divAcoes.querySelector('.btn-adicionar');
+                const textoOriginal = novoBtnAdicionar.textContent;
+                if (textoOriginal === 'Adicionar ao Carrinho') {
+                    novoBtnAdicionar.textContent = '🛒 Adicionar';
+                }
+            });
+            
+            
+            adicionarEventosProdutosConta();
         }
         
-        function renderizarCategoriasConta() {
-            const container = document.querySelector('.categorias');
-            const categoriasUnicas = [...new Set(produtos.map(p => p.categoria))];
-            
-            let html = `<button data-categoria="todos" class="ativa">Todos os Produtos</button>`;
-            
-            categoriasUnicas.forEach(cat => {
-                const nomeFormatado = cat.charAt(0).toUpperCase() + cat.slice(1);
-                html += `<button data-categoria="${cat}">${nomeFormatado}</button>`;
-            });
-            
-            container.innerHTML = html;
-            
-            // Eventos para filtro por categoria
-            container.querySelectorAll('button').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    container.querySelectorAll('button').forEach(b => b.classList.remove('ativa'));
-                    this.classList.add('ativa');
-                    
-                    const categoriaAtiva = this.getAttribute('data-categoria');
-                    filtrarProdutosConta(categoriaAtiva);
-                });
-            });
-        }
+        
         
         function configurarBuscaConta() {
             const campoBusca = document.getElementById('campo-pesquisa');
@@ -411,14 +436,18 @@
                     produto.nome.toLowerCase().includes(termo) ||
                     produto.descricao?.toLowerCase().includes(termo)
                 );
-                renderizarProdutosConta(produtosFiltrados);
+                renderizarProdutos('todos',produtosFiltrados);
+                 setTimeout(() => {
+                    adicionarFavoritosAosProdutos();
+                }, 100);
             };
             
             campoBusca.addEventListener('input', executarBusca);
             botaoBusca.addEventListener('click', executarBusca);
+            
         }
         
-        function filtrarProdutosConta(categoria) {
+        /*function filtrarProdutosConta(categoria) {
             const termo = document.getElementById('campo-pesquisa')?.value.toLowerCase() || '';
             let produtosFiltrados = produtos;
             
@@ -436,7 +465,7 @@
             }
             
             renderizarProdutosConta(produtosFiltrados);
-        }
+        }*/
         
         function adicionarEventosProdutosConta() {
             
@@ -1085,16 +1114,69 @@
                 }
             };
         }
+
+
+        // ==================== HAMBURGUER MOBILE ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.querySelector('.admin-sidebar');
+            
+            if (!menuToggle || !sidebar) return;
+            
+            // Criar overlay dinamicamente
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            
+            // Abrir/fechar menu
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            
+            // Fechar menu ao clicar no overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                this.classList.remove('active');
+            });
+            
+            // Fechar menu ao clicar em um item (mobile)
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Fechar menu ao pressionar ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+            
+            // Em telas grandes, garantir menu visível
+            function checkScreenSize() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    sidebar.style.display = 'block';
+                } else {
+                    sidebar.style.display = 'none';
+                }
+            }
+            
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+        });
         
        document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM carregado, verificando login...');
         
-        // Verificação inicial
-        if (!usuarioLogado) {
-            alert('Você precisa fazer login para acessar sua conta!');
-            window.location.href = 'login.html';
-            return;
-        }
         
         // Mostrar área da conta
         document.getElementById('conta-area').style.display = 'block';

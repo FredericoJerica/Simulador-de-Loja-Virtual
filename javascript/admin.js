@@ -598,3 +598,77 @@
                 window.location.href = 'login.html'
             }
         });
+
+
+
+ // ==================== HAMBURGUER MOBILE ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.querySelector('.admin-sidebar');
+            
+            if (!menuToggle || !sidebar) return;
+            
+            // Criar overlay dinamicamente
+            const overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            
+            // Abrir/fechar menu
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            
+            // Fechar menu ao clicar no overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                this.classList.remove('active');
+            });
+            
+            // Fechar menu ao clicar em um item (mobile)
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Fechar menu ao pressionar ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+            
+            // Em telas grandes, garantir menu visível
+            function checkScreenSize() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    sidebar.style.display = 'block';
+                } else {
+                    sidebar.style.display = 'none';
+                }
+            }
+            
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+        });
+        
+       document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM carregado, verificando login...');
+        
+        
+        // Mostrar área da conta
+        document.getElementById('conta-area').style.display = 'block';
+        
+        // Carregar dados do usuário após um pequeno delay
+        setTimeout(() => {
+            console.log('Iniciando carregamento dos dados do usuário...');
+            carregarDadosUsuario();
+        }, 300);
+    });
